@@ -1,33 +1,6 @@
 import React, { Component } from 'react';
 import Osc from './osc';
 import Sound from './sound';
-
-
-//variables
-let audioCtx = new AudioContext();
-let isPlaying = false;
-var tempo = 120;
-let current16thNote = 1;
-let futureTickTime = 0.0;
-let timerID = 0;//_______________________________________________________________
-let track =[1, 3, 9];
-let interval;
-
-function futureTick(){
-  var secondsPerBeat = 60/tempo;
-  futureTickTime += 0.25 * secondsPerBeat;
-}
-
-function scheulder(){
-  while(futureTickTime < audioCtx.currentTime + 0.1){
-    futureTick();
-    futureTickTime += 1;
-    // console.log(audioCtx.currentTime);
-    // console.log(futureTickTime);
-  }
-   interval = window.setTimeout(scheulder, 50);
-}
-scheulder();
 //react does not like undefined....even in conditionals...
 try{
   const AudioContext = window.AudioContext || window.webkitAudioContext || window.webkitAudioContext;
@@ -37,11 +10,44 @@ catch(err){
 }
 
 class Sequencer extends Component {
+  //variables
+  audioCtx = new AudioContext();
+  isPlaying = false;
+  tempo = 120;
+
+  futureTickTime = 0.0;
+  timerID = 0;//_______________________________________________________________
+  track =[1, 3, 9];
+  interval;
+
+  constructor(props){
+    super();
+    this.state = {
+      current16thNote: 1
+    }
+  }
+
+  futureTick =() =>{
+    var secondsPerBeat = 60 / this.tempo;
+    var _current16thNote = this.state.current16thNote > 15
+      ? 1: this.state.current16thNote +1;
+    this.futureTickTime += 0.25 * secondsPerBeat;
+    this.setState({ current16thNote: _current16thNote});
+  }
+
+  scheduler = ()=>{
+    while(this.futureTickTime < this.audioCtx.currentTime + 0.1){
+      this.futureTick();
+    }
+    this.interval = window.setTimeout(this.scheduler, 50);
+  }
+
   render() {
     return (
-      <div>CHRIS
-        <Osc audioCtx={audioCtx}/>
-        <Sound audioCtx={audioCtx}/>
+      <div>{this.state.current16thNote}
+        <button onClick={this.scheduler}></button>
+        <Osc audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
+        <Sound audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
       </div>
 
     );

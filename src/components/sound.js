@@ -4,9 +4,14 @@ import kick from '../sounds/kick.mp3';
 
 class Sound extends Component {
   _audioCtx = this.props.audioCtx;
+  track = [1,3,4, 5, 6, 7, 9, 10];
+
+  componentWillReceiveProps=(nextProps)=>{
+    var nextBeat = nextProps.current16thNote;
+    this.track.includes(nextBeat) && this.sound.play(nextProps.futureTickTime);
+  }
 
   audioFileLoader = (fileDirectory) =>{
-    console.log(this._audioCtx);
       var soundObj = {};
       soundObj.fileDirectory = fileDirectory;
 
@@ -21,11 +26,11 @@ class Sound extends Component {
 
       getSound.send();
 
-      soundObj.play = () => {
+      soundObj.play = (timeVal) => {
           var playSound = this._audioCtx.createBufferSource();
           playSound.buffer = soundObj.soundToPlay;
           playSound.connect(this._audioCtx.destination)
-          playSound.start()
+          playSound.start(timeVal)
       }
       return soundObj;
   }
@@ -35,7 +40,7 @@ class Sound extends Component {
   render() {
     return (
       <div className="osc" onClick={this.sound.play}>
-      XXX
+      XXX     {this.props.current16thNote}
       </div>
 
     );
