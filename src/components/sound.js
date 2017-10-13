@@ -11,14 +11,16 @@ class Sound extends Component {
   prevBeat;
   beatToPlay;
   componentWillReceiveProps=(nextProps)=>{
-    var nextBeat = nextProps.current16thNote;
-    if(this.track.includes(nextBeat)){
-      this.track2[nextBeat-1] = true;
-      this.sound.schedulePlay(nextProps.futureTickTime);
-      this.beatToPlay = nextBeat;
-      //why was this here?
-      // this.futureTickTime = nextProps.futureTickTime;
+    if(nextProps.current16thNote != this.prevBeat){
+      var nextBeat = nextProps.current16thNote;
+      if(this.track.includes(nextBeat)){
+        this.track2[nextBeat-1] = true;
+        this.sound.schedulePlay(nextProps.futureTickTime);
+        this.beatToPlay = nextBeat;
+      }
+      this.prevBeat = nextProps.current16thNote;
     }
+
   }
 
   audioFileLoader = (fileDirectory) =>{

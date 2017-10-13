@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Osc from './osc';
 import Sound from './sound';
+import Knob from './knob.js';
+
 import * as soundLib from '../sounds/soundSources.js';
 
 //react does not like undefined....even in conditionals...
@@ -25,12 +27,13 @@ class Sequencer extends Component {
   constructor(props){
     super();
     this.state = {
-      current16thNote: 1
+      current16thNote: 1,
+      tempo: 120,
     }
   }
 
   futureTick =() =>{
-    var secondsPerBeat = 60 / this.tempo;
+    var secondsPerBeat = 60 / this.state.tempo;
     var _current16thNote = this.state.current16thNote > 15
       ? 1: this.state.current16thNote +1;
     this.futureTickTime += 0.25 * secondsPerBeat;
@@ -48,12 +51,19 @@ class Sequencer extends Component {
     this.futureTickTime = this.audioCtx.currentTime;
     this.scheduler();
   }
+  onTempoChange =(newTempo)=>{
+    console.log(newTempo);
+    this.setState({tempo: newTempo});
+  }
 
 
 
   render() {
     return (
       <div>
+        <h1>{this.state.tempo} BPM</h1>
+        <Knob onTempoChange={this.onTempoChange}/>
+
         {soundLib.sources.map((source, i)=>
           <Sound  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime} path={source.path} key={i}/>
           )

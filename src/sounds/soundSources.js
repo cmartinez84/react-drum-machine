@@ -8,5 +8,5 @@ export const sources = [
   {name: 'kick', path: kick},
   {name: 'snare', path: snare },
   {name: 'hihat', path: hihat },
-  {name: 'shaker', path: shaker},
+  {name: 'shaker', path: shaker}
 ]

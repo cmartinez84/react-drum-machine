@@ -41,3 +41,23 @@
 .lit{
   background: red;
 }
+.slider-width{
+  width: 800px;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 33px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: yellow;
+    margin-top: -4px;
+}
