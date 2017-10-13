@@ -12,13 +12,15 @@ class Pad extends Component {
       this.isPlaying = false;
     }
   }
+  // <button className={"pad" + (this.isPlaying ?' lit' : '') } onClick={this.props.onPadClick}>
 
   render() {
 
     return (
-      <button className={"pad" + (this.isPlaying ?' lit' : '')} onClick={this.props.onPadClick}>
+      <button className={`pad ${this.isPlaying && 'lit'} ${this.props.isPressed && 'pressed'}`} onClick={this.props.onPadClick}>
         <p>{this.props.name} {this.props._key}</p>
-        <p>{this.props.current16thNote}</p>
+        <p>{this.props.isPlaying.toString()}</p>
+        <p>{this.props.path}</p>
       </button>
 
     );

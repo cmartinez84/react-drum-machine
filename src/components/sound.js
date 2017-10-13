@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import kick from '../sounds/kick.mp3';
 import Pad from './pad.js';
 
-
 class Sound extends Component {
   _audioCtx = this.props.audioCtx;
   track = [1, 3, 9];
@@ -15,7 +14,6 @@ class Sound extends Component {
     var nextBeat = nextProps.current16thNote;
     if(this.track.includes(nextBeat)){
       this.track2[nextBeat-1] = true;
-      console.log(this.track2);
       this.sound.schedulePlay(nextProps.futureTickTime);
       this.beatToPlay = nextBeat;
       //why was this here?
@@ -59,18 +57,15 @@ class Sound extends Component {
       this.track.push(key);
 
     }
-    console.log(this.track);
-    // this.sound.schedulePlay();
   }
-  sound = this.audioFileLoader(kick);
+  sound = this.audioFileLoader(this.props.path);
 
   render() {
     return (
       <div>
       {Array.apply(null, Array(16)).map((i, index)=>
-        <Pad name="kick"isPlaying={this.isPlaying} current16thNote={this.props.current16thNote} beatToPlay={this.beatToPlay} futureTickTime={this.futureTickTime} audioCtx={this._audioCtx} key={index} _key={index +1} onPadClick={()=>{this.onPadClick(index + 1)}}/>
+        <Pad name="kick"isPlaying={this.isPlaying} current16thNote={this.props.current16thNote} beatToPlay={this.beatToPlay} futureTickTime={this.futureTickTime} audioCtx={this._audioCtx} key={index} _key={index +1} onPadClick={()=>{this.onPadClick(index + 1)}} isPressed={this.track.includes(index + 1)}/>
       )}
-      {this.futureTickTime}
       </div>
     );
   }

@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import Osc from './osc';
 import Sound from './sound';
+import * as soundLib from '../sounds/soundSources.js';
+
 //react does not like undefined....even in conditionals...
 try{
   const AudioContext = window.AudioContext || window.webkitAudioContext || window.webkitAudioContext;
+  console.log((soundLib.sources[1].path))
 }
 catch(err){
   console.log("Looks like you're using outdated technology");
@@ -17,7 +20,6 @@ class Sequencer extends Component {
 
   futureTickTime = 0.0;
   timerID = 0;//_______________________________________________________________
-  track =[1, 3, 9];
   interval;
 
   constructor(props){
@@ -46,12 +48,18 @@ class Sequencer extends Component {
     this.futureTickTime = this.audioCtx.currentTime;
     this.scheduler();
   }
+
+
+
   render() {
     return (
       <div>
+        {soundLib.sources.map((source, i)=>
+          <Sound  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime} path={source.path} key={i}/>
+          )
+        }
         <button onClick={this.beginScheduler}>Start</button>
         <Osc  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
-        <Sound  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
       </div>
 
     );

@@ -35,6 +35,9 @@
   height: 100px;
   margin: 10px;
 }
+.pressed{
+  background: yellow;
+}
 .lit{
   background: red;
 }
