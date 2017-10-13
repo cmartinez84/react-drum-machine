@@ -26,8 +26,15 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-.osc{
-  background: red;
+
+.pad{
+  background: pink;
   color: white;
-  border: 1px black solid;
+  border: 3px solid black;
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+}
+.lit{
+  background: red;
 }

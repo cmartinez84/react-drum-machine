@@ -42,12 +42,16 @@ class Sequencer extends Component {
     this.interval = window.setTimeout(this.scheduler, 50);
   }
 
+  beginScheduler = () => {
+    this.futureTickTime = this.audioCtx.currentTime;
+    this.scheduler();
+  }
   render() {
     return (
-      <div>{this.state.current16thNote}
-        <button onClick={this.scheduler}></button>
-        <Osc audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
-        <Sound audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
+      <div>
+        <button onClick={this.beginScheduler}>Start</button>
+        <Osc  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
+        <Sound  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
       </div>
 
     );
