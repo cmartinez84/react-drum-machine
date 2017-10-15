@@ -22,6 +22,8 @@ class Sound extends Component {
   prevBeat;
   beatToPlay;
   gainNode;
+  filter = this._audioCtx.createBiquadFilter();
+  convolver = this._audioCtx.createConvolver();
   // track = {
   //   tempo: 120,
   //   bars = [
@@ -54,9 +56,7 @@ class Sound extends Component {
     bypass: 0
   });
 
-//osc config
-  filter = this._audioCtx.createBiquadFilter();
-  convolver = this._audioCtx.createConvolver();
+
 
   //experimental shit...warning
   // distortion = this._audioCtx.createWaveShaper();
@@ -78,7 +78,7 @@ class Sound extends Component {
   componentWillReceiveProps=(nextProps)=>{
     if(nextProps.current16thNote != this.prevBeat){
       var nextBeat = nextProps.current16thNote;
-      if(this.sequence.includes(nextBeat)){
+      if(this.sequence[this.props.currentBar].includes(nextBeat)){
         this.track2[nextBeat-1] = true;
         this.sound.schedulePlay(nextProps.futureTickTime);
         this.beatToPlay = nextBeat;
@@ -146,9 +146,9 @@ loadImpulse = function (path)
       return soundObj;
   }
   //add or remove beat to track
-  onPadClick = (key) =>{
+  onPadClick = (padKey) =>{
     var instKey = this.props.instrumentKey;
-    this.props.changeSequence(key, instKey);
+    this.props.changeSequence(padKey, instKey);
   }
 
   handleGainChange = (newGain) =>{
@@ -176,7 +176,7 @@ loadImpulse = function (path)
           key={index}
           _key={index +1}
           onPadClick={()=>{this.onPadClick(index + 1)}}
-          isPressed={this.sequence.includes(index + 1)}/>
+          isPressed={this.sequence[this.props.currentBar].includes(index + 1)}/>
       )}
       <Filter handleFilterChange={this.handleFilterChange}/>
       <Volume handleGainChange={this.handleGainChange}/>

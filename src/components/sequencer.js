@@ -26,26 +26,29 @@ class Sequencer extends Component {
   futureTickTime = 0.0;
   timerID = 0;//_______________________________________________________________
   interval;
+  barsIndexCount = 1;
+
   track = {
     tempo: 120,
-    bars: [
-      // each bar an array of objects????
-      [
-        {instrument: "kick", sequence: [1, 15, 14]},
-        // {instrument: snare, sequence: [1, 15, 14]},
-        // {instrument: hihat, sequence: [1, 15, 14]},
+    instruments: [
+      {
+        isActive: true,
+        name: "kick",
+        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6]],
+      },
+      {
+        isActive: true,
+        name: "snare",
+        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6]],
+      }
+    ],
 
-      ]
-    ]
   }
-// this.track.bars[0].instrument = kick;
-// this.track.bars[0].sequence
-
-
   constructor(props){
     super();
     this.state = {
       current16thNote: 1,
+      currentBar: 0,
       tempo: 120,
     }
   }
@@ -56,6 +59,16 @@ class Sequencer extends Component {
       ? 1: this.state.current16thNote +1;
     this.futureTickTime += 0.25 * secondsPerBeat;
     this.setState({ current16thNote: _current16thNote});
+
+    if(_current16thNote == 1){
+      if(this.state.currentBar === this.barsIndexCount){
+        this.setState({currentBar: 0})
+      }
+      else{
+        const nextBar = this.state.currentBar +1;
+        this.setState({currentBar: nextBar});
+      }
+    }
   }
 
   scheduler = ()=>{
@@ -73,13 +86,15 @@ class Sequencer extends Component {
     console.log(newTempo);
     this.setState({tempo: newTempo});
   }
-  changeSequence=(key, instKey)=>{
-    if(this.track.bars[0][instKey].sequence.includes(key)){
-      const index = this.track.bars[0][instKey].sequence.indexOf(key);
-      this.track.bars[0][instKey].sequence.splice(index, 1);
+  changeSequence=(padKey, instKey)=>{
+    var barKey = this.state.currentBar;
+    console.log(`${barKey} ${padKey} ${instKey}`);
+    if(this.track.instruments[instKey].sequence[barKey].includes(padKey)){
+      const index = this.track.instruments[instKey].sequence[barKey].indexOf(padKey);
+      this.track.instruments[instKey].sequence[barKey].splice(index, 1);
     }
     else{
-      this.track.bars[0][instKey].sequence.push(key);
+      this.track.instruments[instKey].sequence[barKey].push(padKey);
     }
   }
 
@@ -89,9 +104,6 @@ class Sequencer extends Component {
   // {Array.apply(null, Array(7)).map((i)=>
   //   <Bar/>
   // )}
-  //
-  // his.track.bars[0].instrument = kick;
-  // this.track.bars[0].sequence
 
   render() {
     return (
@@ -100,17 +112,18 @@ class Sequencer extends Component {
         <h1>{this.state.tempo} BPM</h1>
         <Knob onTempoChange={this.onTempoChange}/>
 
-        {this.track.bars[0] .map((instrument, i)=>
+        {this.track.instruments.map((instrument, i)=>
         <Sound
           instrument={instrument}
           instrumentKey={i}
           audioCtx={this.audioCtx}
           current16thNote={this.state.current16thNote}
+          currentBar={this.state.currentBar}
           futureTickTime={this.futureTickTime}
-          path={soundLib.sources[instrument.instrument]}
+          path={soundLib.sources[instrument.name]}
           sequence={instrument.sequence}
           key={i}
-          name={instrument.instrument}
+          name={instrument.name}
           changeSequence={this.changeSequence}
           />
           )//end map
