@@ -4,9 +4,16 @@ import hihat from '../sounds/hihat.mp3';
 import shaker from '../sounds/shaker.mp3';
 
 // export default
-export const sources = [
-  {name: 'kick', path: kick},
-  {name: 'snare', path: snare },
-  {name: 'hihat', path: hihat },
-  {name: 'shaker', path: shaker}
-]
+// export const sources = [
+//   {name: 'kick', path: kick},
+//   {name: 'snare', path: snare },
+//   {name: 'hihat', path: hihat },
+//   {name: 'shaker', path: shaker}
+// ]
+
+export const sources = {
+  kick: kick,
+  snare: snare,
+  hihat: hihat,
+  shaker: shaker,
+}

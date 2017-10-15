@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import Tuna from 'tunajs';
 import Osc from './osc';
 import Sound from './sound';
+// import Bar from './bar.jsx';
 import Knob from './knob.js';
-
+import BeatCounter from './beatCounter';
 import * as soundLib from '../sounds/soundSources.js';
 
 //react does not like undefined....even in conditionals...
@@ -14,6 +16,7 @@ catch(err){
   console.log("Looks like you're using outdated technology");
 }
 
+
 class Sequencer extends Component {
   //variables
   audioCtx = new AudioContext();
@@ -23,6 +26,21 @@ class Sequencer extends Component {
   futureTickTime = 0.0;
   timerID = 0;//_______________________________________________________________
   interval;
+  track = {
+    tempo: 120,
+    bars: [
+      // each bar an array of objects????
+      [
+        {instrument: "kick", sequence: [1, 15, 14]},
+        // {instrument: snare, sequence: [1, 15, 14]},
+        // {instrument: hihat, sequence: [1, 15, 14]},
+
+      ]
+    ]
+  }
+// this.track.bars[0].instrument = kick;
+// this.track.bars[0].sequence
+
 
   constructor(props){
     super();
@@ -55,21 +73,51 @@ class Sequencer extends Component {
     console.log(newTempo);
     this.setState({tempo: newTempo});
   }
+  changeSequence=(key, instKey)=>{
+    if(this.track.bars[0][instKey].sequence.includes(key)){
+      const index = this.track.bars[0][instKey].sequence.indexOf(key);
+      this.track.bars[0][instKey].sequence.splice(index, 1);
+    }
+    else{
+      this.track.bars[0][instKey].sequence.push(key);
+    }
+  }
 
 
+
+  //
+  // {Array.apply(null, Array(7)).map((i)=>
+  //   <Bar/>
+  // )}
+  //
+  // his.track.bars[0].instrument = kick;
+  // this.track.bars[0].sequence
 
   render() {
     return (
       <div>
+
         <h1>{this.state.tempo} BPM</h1>
         <Knob onTempoChange={this.onTempoChange}/>
 
-        {soundLib.sources.map((source, i)=>
-          <Sound  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime} path={source.path} key={i}/>
-          )
+        {this.track.bars[0] .map((instrument, i)=>
+        <Sound
+          instrument={instrument}
+          instrumentKey={i}
+          audioCtx={this.audioCtx}
+          current16thNote={this.state.current16thNote}
+          futureTickTime={this.futureTickTime}
+          path={soundLib.sources[instrument.instrument]}
+          sequence={instrument.sequence}
+          key={i}
+          name={instrument.instrument}
+          changeSequence={this.changeSequence}
+          />
+          )//end map
         }
         <button onClick={this.beginScheduler}>Start</button>
         <Osc  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
+        <BeatCounter current16thNote={this.state.current16thNote}/>
       </div>
 
     );
