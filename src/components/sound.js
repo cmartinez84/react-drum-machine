@@ -86,6 +86,10 @@ class Sound extends Component {
       this.prevBeat = nextProps.current16thNote;
     }
   }
+  componentDidMount=()=>{
+    this.props.soundObjReferences.push(this.sound);
+    console.log(this.props.soundObjReferences);
+  }
 
 loadImpulse = function (path)
   {
@@ -124,8 +128,8 @@ loadImpulse = function (path)
       ///end
 
       getSound.send();
-      this.gainNode = this._audioCtx.createGain();
-      this.gainNode.gain.value = 1;
+      soundObj.gainNode = this._audioCtx.createGain();
+      soundObj.gainNode.gain.value = 1;
       this.filter.type="allpass";
 
       soundObj.schedulePlay = (timeVal) => {
@@ -134,11 +138,13 @@ loadImpulse = function (path)
           playSound.buffer = soundObj.soundToPlay;
           // playSound.connect(this.filter);
           // // this.convolver.connect(this.filter);
-          // this.filter.connect(this.gainNode);
+          // playSoundconnect(this.gainNode);
           // this.gainNode.connect(this._audioCtx.destination);
-          playSound.connect(this.tremolo);
-          this.tremolo.connect(this.chorus);
-          this.chorus.connect(this._audioCtx.destination);
+          playSound.connect(soundObj.gainNode);
+          soundObj.gainNode.connect(this._audioCtx.destination);
+          // playSound.connect(this._audioCtx.destination);
+          // this.tremolo.connect(this.chorus);
+          // this.chorus.connect(this._audioCtx.destination);
           // this.tremolo.connect(this._audioCtx.destination);
           playSound.start(timeVal);
           var blinkSchedule = this.props.futureTickTime - this._audioCtx;
@@ -179,7 +185,6 @@ loadImpulse = function (path)
           isPressed={this.sequence[this.props.currentBar].includes(index + 1)}/>
       )}
       <Filter handleFilterChange={this.handleFilterChange}/>
-      <Volume handleGainChange={this.handleGainChange}/>
       </div>
     );
   }

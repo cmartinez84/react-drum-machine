@@ -4,6 +4,8 @@ import Osc from './osc';
 import Sound from './sound';
 // import Bar from './bar.jsx';
 import Knob from './knob.js';
+import Volume from './volume.js';
+import BarCounter from './barCounter.jsx';
 import BeatCounter from './beatCounter';
 import * as soundLib from '../sounds/soundSources.js';
 
@@ -39,11 +41,53 @@ class Sequencer extends Component {
       {
         isActive: true,
         name: "snare",
+        sequence: [[1,10], [4, 5, ,8, 6]],
+      },
+      {
+        isActive: true,
+        name: "hihat",
+        sequence: [[1,5, 6], [4, 5, 6]],
+      },
+      {
+        isActive: true,
+        name: "shaker",
+        sequence: [[1, 2, 3, 9], [4, 5, 6]],
+      },
+      {
+        isActive: true,
+        name: "crackle",
         sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6]],
-      }
+      },
+      {
+        isActive: true,
+        name: "snare",
+        sequence: [[1, 2,8, 12, 6], [4, 5, 6]],
+      },
+      {
+        isActive: true,
+        name: "meow",
+        sequence: [[], []],
+      },
+      {
+        isActive: true,
+        name: "shaker",
+        sequence: [[1, 2,7, 9, 6], [4, 5, 6]],
+      },
+      {
+        isActive: true,
+        name: "thump",
+        sequence: [[1, 13, 6], [2, 15, 16]],
+      },
+      {
+        isActive: true,
+        name: "heyyo",
+        sequence: [[4, 5, 6], [4, 5, 6]],
+      },
     ],
 
   }
+
+  soundObjReferences = [];
   constructor(props){
     super();
     this.state = {
@@ -98,7 +142,10 @@ class Sequencer extends Component {
     }
   }
 
-
+  handleGainChange = (newGain, instIndex) => {
+    this.soundObjReferences[instIndex].gainNode.gain.value = newGain;
+    console.log(this.soundObjReferences);
+  }
 
   //
   // {Array.apply(null, Array(7)).map((i)=>
@@ -114,6 +161,7 @@ class Sequencer extends Component {
 
         {this.track.instruments.map((instrument, i)=>
         <Sound
+          soundObjReferences={this.soundObjReferences}
           instrument={instrument}
           instrumentKey={i}
           audioCtx={this.audioCtx}
@@ -128,8 +176,13 @@ class Sequencer extends Component {
           />
           )//end map
         }
+        {this.track.instruments.map((instrument, index)=>
+          <Volume handleGainChange={this.handleGainChange} instIndex={index}/>
+          )
+        }
         <button onClick={this.beginScheduler}>Start</button>
         <Osc  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
+        <BarCounter barsIndexCount={this.barsIndexCount}/>
         <BeatCounter current16thNote={this.state.current16thNote}/>
       </div>
 

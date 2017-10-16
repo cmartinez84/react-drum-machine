@@ -6,7 +6,8 @@ class Volume extends Component {
 
 handleGainChange = (e) =>{
   var newGain = e.target.value;
-  this.props.handleGainChange(newGain);
+  var instIndex = this.props.instIndex;
+  this.props.handleGainChange(newGain, instIndex);
 }
 
   render() {
