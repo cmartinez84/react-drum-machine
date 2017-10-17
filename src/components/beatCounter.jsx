@@ -8,11 +8,13 @@ class BeatCounter extends Component {
   render() {
     return (
       <div>
-        Beat Counter
-        {this.dummyArray.map((beep, index)=>
-          <span className={`beatTracker ${this.props.current16thNote == index + 1 && "beatLit"}` }>. {this.spaceArray.includes(index) && ""}</span>
-          )
-        }
+        <div className="beat-counter-filler inline"> </div>
+          <div className="beat-dots-container inline">
+            {this.dummyArray.map((beep, index)=>
+              <span className={`beatTracker ${this.props.current16thNote == index + 1 && "beatLit"}` }>. {this.spaceArray.includes(index) && ""}</span>
+              )
+            }
+          </div>
       </div>
     );
   }

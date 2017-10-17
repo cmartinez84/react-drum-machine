@@ -28,7 +28,9 @@ class Sequencer extends Component {
   futureTickTime = 0.0;
   timerID = 0;//_______________________________________________________________
   interval;
-  barsIndexCount = 1;
+  barsIndexCount = 7;
+  isBarChangeScheduled = false;
+  nextScheduledBar;
 
 // track.instruments[index].sequence[barIndex]
   track = {
@@ -37,52 +39,52 @@ class Sequencer extends Component {
       {
         isActive: true,
         name: "kick",
-        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6]],
+        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
         name: "snare",
-        sequence: [[1,10], [4, 5, ,8, 6]],
+        sequence: [[1,10], [4, 5, ,8, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
         name: "hihat",
-        sequence: [[1,5, 6], [4, 5, 6]],
+        sequence: [[1,5, 6], [4, 5, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
         name: "shaker",
-        sequence: [[1, 2, 3, 9], [4, 5, 6]],
+        sequence: [[1, 2, 3, 9], [4, 5, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
         name: "crackle",
-        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6]],
+        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
         name: "snare",
-        sequence: [[1, 2,8, 12, 6], [4, 5, 6]],
+        sequence: [[1, 2,8, 12, 6], [4, 5, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
         name: "meow",
-        sequence: [[], []],
+        sequence: [[], [],[],[],[],[],[],[]],
       },
       {
         isActive: true,
         name: "shaker",
-        sequence: [[1, 2,7, 9, 6], [4, 5, 6]],
+        sequence: [[1, 2,7, 9, 6], [4, 5, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
         name: "thump",
-        sequence: [[1, 13, 6], [2, 15, 16]],
+        sequence: [[1, 13, 6], [2, 15, 16],[],[],[],[],[],[]],
       },
       {
         isActive: true,
         name: "heyyo",
-        sequence: [[4, 5, 6], [4, 5, 6]],
+        sequence: [[4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
       },
     ],
 
@@ -105,13 +107,18 @@ class Sequencer extends Component {
     this.futureTickTime += 0.25 * secondsPerBeat;
     this.setState({ current16thNote: _current16thNote});
 
-    if(_current16thNote == 1){
-      if(this.state.currentBar === this.barsIndexCount){
-        this.setState({currentBar: 0})
+    if(_current16thNote === 1){
+      if(this.isBarChangeScheduled === false){
+        if(this.state.currentBar === this.barsIndexCount){
+          this.setState({currentBar: 0})
+        }
+        else{
+          const nextBar = this.state.currentBar +1;
+          this.setState({currentBar: nextBar});
+        }
       }
       else{
-        const nextBar = this.state.currentBar +1;
-        this.setState({currentBar: nextBar});
+        this.changeBarView();
       }
     }
   }
@@ -152,7 +159,19 @@ class Sequencer extends Component {
     console.log(this.track);
 
   }
+  changeBarView = () => {
+    const nextBar = this.nextScheduledBar;
+    this.setState({
+      currentBar: nextBar,
+      current16thNote: 1
+    });
+    this.isBarChangeScheduled = false;
 
+  }
+  scheduleBarChange = (barIndex) =>{
+    this.isBarChangeScheduled = true;
+    this.nextScheduledBar = barIndex;
+  }
   //
   // {Array.apply(null, Array(7)).map((i)=>
   //   <Bar/>
@@ -183,18 +202,26 @@ class Sequencer extends Component {
           />
           )//end map
         }
+        <BeatCounter current16thNote={this.state.current16thNote}/>
+
         {this.track.instruments.map((instrument, index)=>
 
           <div className="instrument-controls">
             <p>{instrument.name}</p>
-            <Volume handleGainChange={this.handleGainChange} instIndex={index}/>
+            <Volume handleGainChange={this.handleGainChange}
+                    instIndex={index}/>
           </div>
           )
         }
         <button onClick={this.beginScheduler}>Start</button>
-        <Osc  audioCtx={this.audioCtx} current16thNote={this.state.current16thNote} futureTickTime={this.futureTickTime}/>
-        <BarCounter barsIndexCount={this.barsIndexCount}/>
-        <BeatCounter current16thNote={this.state.current16thNote}/>
+        <Osc
+          audioCtx={this.audioCtx}
+          current16thNote={this.state.current16thNote}
+          futureTickTime={this.futureTickTime}/>
+        <BarCounter
+          barsIndexCount={this.barsIndexCount}
+          currentBar={this.state.currentBar}
+          scheduleBarChange={this.scheduleBarChange}/>
       </div>
 
     );

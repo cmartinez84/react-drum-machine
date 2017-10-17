@@ -42,18 +42,19 @@ width: 80px;
 }
 
 
-.beatTracker{
-  display: inline;
-  color: black;
-  /*background: black;*/
-  font-size: 100px;
 
-}
 .beatLit{
   color: red;
 }
-.barCounter{
+.bar-counter{
   font-size: 50px;
+  color: black;
+}
+.bar-counter-lit{
+  color: red;
+}
+.barCounterLit{
+  color: red;
 }
 div.instrument-controls{
  border: 1px solid green;
@@ -76,5 +77,23 @@ span.instrument-pad-name p{
   margin: 0 !important;
 }
 div.pad-container{
+  display: inline-block;
+}
+div.beat-counter-filler{
+  width: 231px;
+}
+div.beat-dots-conatiner{
+  /*width: 51*/
+}
+.beatTracker{
+  display: inline;
+  color: black;
+  /*background: black;*/
+  font-size: 41px;
+  letter-spacing: 5px;
+
+}
+
+.inline{
   display: inline-block;
 }

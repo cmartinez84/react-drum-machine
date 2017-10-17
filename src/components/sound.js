@@ -182,9 +182,8 @@ changeSound = (e) => {
         <div className="pad-container">
           <select onChange={this.changeSound}>
           {Object.keys(soundLib.sources).map((key)=>
-             <option key={key} value={key}>{key}</option>
-          )
-
+             <option key={key} value={key} selected={this.props.name === key}>{key}</option>
+            )
           }
 
           </select>
