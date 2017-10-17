@@ -12,7 +12,7 @@ import * as soundLib from '../sounds/soundSources.js';
 //react does not like undefined....even in conditionals...
 try{
   const AudioContext = window.AudioContext || window.webkitAudioContext || window.webkitAudioContext;
-  console.log((soundLib.sources[1].path))
+  // console.log((soundLib.sources[1].path))
 }
 catch(err){
   console.log("Looks like you're using outdated technology");
@@ -136,12 +136,10 @@ class Sequencer extends Component {
     this.scheduler();
   }
   onTempoChange =(newTempo)=>{
-    console.log(newTempo);
     this.setState({tempo: newTempo});
   }
   changeSequence=(padKey, instKey)=>{
     var barKey = this.state.currentBar;
-    console.log(`${barKey} ${padKey} ${instKey}`);
     if(this.track.instruments[instKey].sequence[barKey].includes(padKey)){
       const index = this.track.instruments[instKey].sequence[barKey].indexOf(padKey);
       this.track.instruments[instKey].sequence[barKey].splice(index, 1);
@@ -153,11 +151,9 @@ class Sequencer extends Component {
 
   handleGainChange = (newGain, instIndex) => {
     this.soundObjReferences[instIndex].gainNode.gain.value = newGain;
-    console.log(this.soundObjReferences);
   }
   changeTrackObj = (instrumentName, instrumentIndex) =>{
     this.track.instruments[instrumentIndex].name = instrumentName;
-    console.log(this.track);
 
   }
   changeBarView = () => {

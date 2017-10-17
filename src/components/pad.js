@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 class Pad extends Component {
   audioCtx = this.props.audioCtx;
   isPlaying = false;
+  isPressed = this.props.isPressed;
+
 
   componentWillReceiveProps=(nextProps)=>{
     if(nextProps.beatToPlay == this.props._key){
@@ -12,12 +14,16 @@ class Pad extends Component {
       this.isPlaying = false;
     }
   }
+  //currently tiles onl reveal themselves once the next beat is measured out. this makes a change instantly
+  changePressedStatusBeforeNextBeat = () =>{
+
+  }
   // <button className={"pad" + (this.isPlaying ?' lit' : '') } onClick={this.props.onPadClick}>
 
   render() {
 
     return (
-      <button className={`pad ${this.isPlaying && 'lit'} ${this.props.isPressed && 'pressed'}`} onClick={this.props.onPadClick}>
+      <button className={`pad ${this.isPlaying ? 'lit':''} ${this.props.isPressed ? 'pressed': ''}`} onClick={this.props.onPadClick}>
       </button>
 
     );
