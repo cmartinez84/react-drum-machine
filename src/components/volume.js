@@ -12,8 +12,8 @@ handleGainChange = (e) =>{
 
   render() {
     return (
-      <div>
-        <label for="instrument-volume">Instrument Volume</label>
+      <div className="instrument-volume">
+        <p className="instrument-volume">Volume</p>
         <input name="instrument-volume" className="volume-slider" type="range" min="0" max="1" step=".01" onChange={this.handleGainChange} />
       </div>
     );

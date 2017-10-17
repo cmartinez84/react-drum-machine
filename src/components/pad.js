@@ -18,9 +18,6 @@ class Pad extends Component {
 
     return (
       <button className={`pad ${this.isPlaying && 'lit'} ${this.props.isPressed && 'pressed'}`} onClick={this.props.onPadClick}>
-        <p>{this.props.name} {this.props._key}</p>
-        <p>{this.props.isPlaying.toString()}</p>
-        <p>{this.props.path}</p>
       </button>
 
     );

@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import Tuna from 'tunajs';
 
 import kick from '../sounds/kick.mp3';
+import snare from '../sounds/snare.mp3';
 import Pad from './pad.js';
 import Volume from './volume.js';
 import Filter from './filter.jsx';
 import conlverPath from '../sounds/Space4ArtGallery.wav';
 import concertHall from '../sounds/ConcertHall.wav';
+import * as soundLib from '../sounds/soundSources.js';
+
 
 
 
@@ -24,22 +27,6 @@ class Sound extends Component {
   gainNode;
   filter = this._audioCtx.createBiquadFilter();
   convolver = this._audioCtx.createConvolver();
-  // track = {
-  //   tempo: 120,
-  //   bars = [
-  //     // each bar an array of objects????
-  //     [
-  //       {instrument: kick, sequence: [1, 15, 14]},
-  //       // {instrument: snare, sequence: [1, 15, 14]},
-  //       // {instrument: hihat, sequence: [1, 15, 14]},
-  //
-  //     ]
-  //   ],
-  // }
-
-
-
-
 
   chorus = new this.tuna.Chorus({
     rate: 1.5,
@@ -167,24 +154,55 @@ loadImpulse = function (path)
   }
   sound = this.audioFileLoader(this.props.path);
 //
+// <Filter handleFilterChange={this.handleFilterChange}/>
+//
+changeSound = (e) => {
+  const instrumentKey = this.props.instrumentKey;
+  const newValue = e.target.value;
+  const fileDirectory = soundLib.sources[newValue];
+  this.sound.fileDirectory = fileDirectory;
+
+  var getSound = new XMLHttpRequest();
+  getSound.open("GET", this.sound.fileDirectory, true);
+  getSound.responseType = "arraybuffer";
+  getSound.onload = () => {
+      this._audioCtx.decodeAudioData(getSound.response, (buffer) =>{
+          this.sound.soundToPlay = buffer;
+      });
+  }
+  getSound.send();
+  this.props.changeTrackObj(newValue, instrumentKey);
+}
+
+
   render() {
     return (
-      <div className="instrument-container">
-        <h1>Name: {this.props.name}</h1>
+      <div className="instrument-container" >
+        <span className="instrument-pad-name"><p>{this.props.name}</p></span>
+        <div className="pad-container">
+          <select onChange={this.changeSound}>
+          {Object.keys(soundLib.sources).map((key)=>
+             <option key={key} value={key}>{key}</option>
+          )
+
+          }
+
+          </select>
         {Array.apply(null, Array(16)).map((i, index)=>
-        <Pad
-          name={this.props.name}
-          isPlaying={this.isPlaying}
-          current16thNote={this.props.current16thNote}
-          beatToPlay={this.beatToPlay}
-          futureTickTime={this.futureTickTime}
-          audioCtx={this._audioCtx}
-          key={index}
-          _key={index +1}
-          onPadClick={()=>{this.onPadClick(index + 1)}}
-          isPressed={this.sequence[this.props.currentBar].includes(index + 1)}/>
-      )}
-      <Filter handleFilterChange={this.handleFilterChange}/>
+          <Pad
+            name={this.props.name}
+            isPlaying={this.isPlaying}
+            current16thNote={this.props.current16thNote}
+            beatToPlay={this.beatToPlay}
+            futureTickTime={this.futureTickTime}
+            audioCtx={this._audioCtx}
+            key={index}
+            _key={index +1}
+            onPadClick={()=>{this.onPadClick(index + 1)}}
+            isPressed={this.sequence[this.props.currentBar].includes(index + 1)}/>
+        )}
+      </div>
+
       </div>
     );
   }

@@ -30,6 +30,7 @@ class Sequencer extends Component {
   interval;
   barsIndexCount = 1;
 
+// track.instruments[index].sequence[barIndex]
   track = {
     tempo: 120,
     instruments: [
@@ -146,6 +147,11 @@ class Sequencer extends Component {
     this.soundObjReferences[instIndex].gainNode.gain.value = newGain;
     console.log(this.soundObjReferences);
   }
+  changeTrackObj = (instrumentName, instrumentIndex) =>{
+    this.track.instruments[instrumentIndex].name = instrumentName;
+    console.log(this.track);
+
+  }
 
   //
   // {Array.apply(null, Array(7)).map((i)=>
@@ -173,11 +179,16 @@ class Sequencer extends Component {
           key={i}
           name={instrument.name}
           changeSequence={this.changeSequence}
+          changeTrackObj={this.changeTrackObj}
           />
           )//end map
         }
         {this.track.instruments.map((instrument, index)=>
-          <Volume handleGainChange={this.handleGainChange} instIndex={index}/>
+
+          <div className="instrument-controls">
+            <p>{instrument.name}</p>
+            <Volume handleGainChange={this.handleGainChange} instIndex={index}/>
+          </div>
           )
         }
         <button onClick={this.beginScheduler}>Start</button>

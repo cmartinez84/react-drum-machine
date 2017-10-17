@@ -2,10 +2,10 @@
 .pad{
   background: pink;
   color: white;
-  border: 3px solid black;
-  width: 100px;
-  height: 100px;
-  margin: 10px;
+  border: 1px solid black;
+  width: 30px;
+  height: 30px;
+  margin: 1px;
 }
 .pressed{
   background: yellow;
@@ -16,7 +16,7 @@
 .slider-width{
   width: 800px;
 }
-#tempoRange[type=range]::-webkit-slider-runnable-track {
+/*#tempoRange[type=range]::-webkit-slider-runnable-track {
     width: 300px;
     height: 5px;
     background: #ddd;
@@ -32,13 +32,13 @@
     border-radius: 50%;
     background: yellow;
     margin-top: -4px;
-}
+}*/
 .volume-slider{
-
+width: 80px;
 }
 
 .instrument-container{
-  border: 1px solid black;
+  /*border: 1px solid black;*/
 }
 
 
@@ -54,4 +54,27 @@
 }
 .barCounter{
   font-size: 50px;
+}
+div.instrument-controls{
+ border: 1px solid green;
+ display: inline-block;
+ width: 100px;
+ height: 200px;
+}
+div.instrument-controls p {
+  margin: 0px;
+}
+div.instrument-volume{
+  display: inline-block;
+}
+
+span.instrument-pad-name{
+  display: inline-block;
+  width: 120px;
+}
+span.instrument-pad-name p{
+  margin: 0 !important;
+}
+div.pad-container{
+  display: inline-block;
 }
