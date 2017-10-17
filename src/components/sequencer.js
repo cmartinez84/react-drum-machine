@@ -31,6 +31,7 @@ class Sequencer extends Component {
   barsIndexCount = 7;
   isBarChangeScheduled = false;
   nextScheduledBar;
+  isolatedInstrument = null;
 
 // track.instruments[index].sequence[barIndex]
   track = {
@@ -172,6 +173,32 @@ class Sequencer extends Component {
     this.isBarChangeScheduled = true;
     this.nextScheduledBar = barIndex;
   }
+  isolateInstrument = (instrumentIndex) =>{
+    if(this.isolatedInstrument === instrumentIndex){
+      this.isolatedInstrument = null;
+    }
+    else {
+      this.isolatedInstrument = instrumentIndex;
+    }
+
+    if(this.isolatedInstrument === null){
+      this.soundObjReferences.forEach((soundObj)=>{
+        soundObj.gainNode.gain.value = 1;
+      })
+    }
+    else{
+      this.soundObjReferences.forEach((soundOb, index) =>{
+        if(index !== this.isolatedInstrument){
+          soundOb.gainNode.gain.value = 0;
+        }
+        else{
+          soundOb.gainNode.gain.value = 1;
+
+        }
+      })
+    }
+  }
+
   //
   // {Array.apply(null, Array(7)).map((i)=>
   //   <Bar/>
@@ -185,6 +212,8 @@ class Sequencer extends Component {
         <Knob onTempoChange={this.onTempoChange}/>
 
         {this.track.instruments.map((instrument, i)=>
+        <div>
+
         <Sound
           soundObjReferences={this.soundObjReferences}
           instrument={instrument}
@@ -199,13 +228,15 @@ class Sequencer extends Component {
           name={instrument.name}
           changeSequence={this.changeSequence}
           changeTrackObj={this.changeTrackObj}
+          isolatedInstrument={this.isolatedInstrument}
+          isolateInstrument={this.isolateInstrument}
           />
+      </div>
           )//end map
         }
         <BeatCounter current16thNote={this.state.current16thNote}/>
-
+        //controllers
         {this.track.instruments.map((instrument, index)=>
-
           <div className="instrument-controls">
             <p>{instrument.name}</p>
             <Volume handleGainChange={this.handleGainChange}

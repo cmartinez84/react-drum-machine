@@ -174,11 +174,15 @@ changeSound = (e) => {
   this.props.changeTrackObj(newValue, instrumentKey);
 }
 
-
+isolateInstrument=()=>{
+  this.props.isolateInstrument(this.props.instrumentKey);
+}
   render() {
     return (
       <div className="instrument-container" >
         <span className="instrument-pad-name"><p>{this.props.name}</p></span>
+          <button onClick={this.isolateInstrument}className="isolator">i</button>
+
         <div className="pad-container">
           <select onChange={this.changeSound}>
           {Object.keys(soundLib.sources).map((key)=>
