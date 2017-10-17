@@ -28,11 +28,11 @@ class Sequencer extends Component {
   futureTickTime = 0.0;
   timerID = 0;//_______________________________________________________________
   interval;
-  barsIndexCount = 7;
+  barsIndexCount = 1;
   isBarChangeScheduled = false;
   nextScheduledBar;
   isolatedInstrument = null;
-
+  trackHasStarted = false;
 // track.instruments[index].sequence[barIndex]
   track = {
     tempo: 120,
@@ -40,53 +40,68 @@ class Sequencer extends Component {
       {
         isActive: true,
         name: "kick",
-        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
+        sequence: [[1, 3, 5, 7, 9, 11, 13, 15], []]
       },
       {
         isActive: true,
-        name: "snare",
-        sequence: [[1,10], [4, 5, ,8, 6],[],[],[],[],[],[]],
-      },
-      {
+        name: "kick",
+        sequence: [[1, 3, 15], []]
+      }
+      ,{
         isActive: true,
-        name: "hihat",
-        sequence: [[1,5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "shaker",
-        sequence: [[1, 2, 3, 9], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "crackle",
-        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "snare",
-        sequence: [[1, 2,8, 12, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "meow",
-        sequence: [[], [],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "shaker",
-        sequence: [[1, 2,7, 9, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "thump",
-        sequence: [[1, 13, 6], [2, 15, 16],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "heyyo",
-        sequence: [[4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
+        name: "kick",
+        sequence: [[1, 3,, 9, 11, 13, 15], []]
+      }
+      // {
+      //   isActive: true,
+      //   name: "kick",
+      //   sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
+      // },
+      // {
+      //   isActive: true,
+      //   name: "snare",
+      //   sequence: [[1,10], [4, 5, ,8, 6],[],[],[],[],[],[]],
+      // },
+      // {
+      //   isActive: true,
+      //   name: "hihat",
+      //   sequence: [[1,5, 6], [4, 5, 6],[],[],[],[],[],[]],
+      // },
+      // {
+      //   isActive: true,
+      //   name: "shaker",
+      //   sequence: [[1, 2, 3, 9], [4, 5, 6],[],[],[],[],[],[]],
+      // },
+      // {
+      //   isActive: true,
+      //   name: "crackle",
+      //   sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
+      // },
+      // {
+      //   isActive: true,
+      //   name: "snare",
+      //   sequence: [[1, 2,8, 12, 6], [4, 5, 6],[],[],[],[],[],[]],
+      // },
+      // {
+      //   isActive: true,
+      //   name: "meow",
+      //   sequence: [[], [],[],[],[],[],[],[]],
+      // },
+      // {
+      //   isActive: true,
+      //   name: "shaker",
+      //   sequence: [[1, 2,7, 9, 6], [4, 5, 6],[],[],[],[],[],[]],
+      // },
+      // {
+      //   isActive: true,
+      //   name: "thump",
+      //   sequence: [[1, 13, 6], [2, 15, 16],[],[],[],[],[],[]],
+      // },
+      // {
+      //   isActive: true,
+      //   name: "heyyo",
+      //   sequence: [[4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
+      // },
     ],
 
   }
@@ -95,7 +110,7 @@ class Sequencer extends Component {
   constructor(props){
     super();
     this.state = {
-      current16thNote: 1,
+      current16thNote:0,
       currentBar: 0,
       tempo: 120,
     }
@@ -107,8 +122,7 @@ class Sequencer extends Component {
       ? 1: this.state.current16thNote +1;
     this.futureTickTime += 0.25 * secondsPerBeat;
     this.setState({ current16thNote: _current16thNote});
-
-    if(_current16thNote === 1){
+    if(_current16thNote === 16){
       if(this.isBarChangeScheduled === false){
         if(this.state.currentBar === this.barsIndexCount){
           this.setState({currentBar: 0})
@@ -125,6 +139,7 @@ class Sequencer extends Component {
   }
 
   scheduler = ()=>{
+
     while(this.futureTickTime < this.audioCtx.currentTime + 0.1){
       this.futureTick();
     }
@@ -134,6 +149,7 @@ class Sequencer extends Component {
   beginScheduler = () => {
     this.futureTickTime = this.audioCtx.currentTime;
     this.scheduler();
+    this.trackHasStarted = true;
   }
   onTempoChange =(newTempo)=>{
     this.setState({tempo: newTempo});
@@ -211,13 +227,14 @@ class Sequencer extends Component {
         <div>
 
         <Sound
+          trackHasStarted={this.trackHasStarted}
           soundObjReferences={this.soundObjReferences}
           instrument={instrument}
           instrumentKey={i}
           audioCtx={this.audioCtx}
           current16thNote={this.state.current16thNote}
           currentBar={this.state.currentBar}
-          futureTickTime={this.futureTickTime}
+          futureTickTime={[this.futureTickTime]}
           path={soundLib.sources[instrument.name]}
           sequence={instrument.sequence}
           key={i}

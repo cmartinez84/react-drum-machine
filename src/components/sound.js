@@ -19,9 +19,7 @@ class Sound extends Component {
   tuna = new Tuna(this._audioCtx);
   sequence = this.props.sequence;
   name = this.props.name;
-  track2 = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
   isPlaying = false;
-  futureTickTime;
   prevBeat;
   beatToPlay;
   gainNode;
@@ -63,16 +61,19 @@ class Sound extends Component {
 
 
   componentWillReceiveProps=(nextProps)=>{
-    if(nextProps.current16thNote != this.prevBeat){
-      var nextBeat = nextProps.current16thNote;
-      if(this.sequence[this.props.currentBar].includes(nextBeat)){
-        this.track2[nextBeat-1] = true;
-        this.sound.schedulePlay(nextProps.futureTickTime);
-        this.beatToPlay = nextBeat;
+    if(nextProps.trackHasStarted){
+      if(nextProps.current16thNote != this.prevBeat){
+        var nextBeat = nextProps.current16thNote;
+        if(this.sequence[this.props.currentBar].includes(nextBeat)){
+          console.log(nextProps.currentBar + " " + nextProps.current16thNote);
+          this.sound.schedulePlay(nextProps.futureTickTime[0]);
+          this.beatToPlay = nextBeat;
+        }
+        this.prevBeat = nextProps.current16thNote;
       }
-      this.prevBeat = nextProps.current16thNote;
     }
   }
+
   componentDidMount=()=>{
     this.props.soundObjReferences.push(this.sound);
     console.log(this.props.soundObjReferences);
@@ -134,7 +135,6 @@ loadImpulse = function (path)
           // this.chorus.connect(this._audioCtx.destination);
           // this.tremolo.connect(this._audioCtx.destination);
           playSound.start(timeVal);
-          var blinkSchedule = this.props.futureTickTime - this._audioCtx;
       }
       return soundObj;
   }
@@ -197,12 +197,13 @@ isolateInstrument=()=>{
             isPlaying={this.isPlaying}
             current16thNote={this.props.current16thNote}
             beatToPlay={this.beatToPlay}
-            futureTickTime={this.futureTickTime}
             audioCtx={this._audioCtx}
             key={index}
             _key={index +1}
             onPadClick={()=>{this.onPadClick(index + 1)}}
-            isPressed={this.sequence[this.props.currentBar].includes(index + 1)}/>
+            currentSequence={this.sequence[this.props.currentBar]}
+
+            />
         )}
       </div>
 
@@ -210,5 +211,5 @@ isolateInstrument=()=>{
     );
   }
 }
-
+// isPressed={this.sequence[this.props.currentBar].includes(index + 1)
 export default Sound;
