@@ -45,13 +45,28 @@ class Sequencer extends Component {
       {
         isActive: true,
         name: "kick",
-        sequence: [[1, 3, 15], []]
-      }
-      ,{
+        sequence: [[1, 3, 5, 7, 9, 11, 13, 15], []]
+      },
+      {
         isActive: true,
         name: "kick",
-        sequence: [[1, 3,, 9, 11, 13, 15], []]
-      }
+        sequence: [[1, 3, 5, 7, 9, 11, 13, 15], []]
+      },
+      {
+        isActive: true,
+        name: "kick",
+        sequence: [[1, 3, 5, 7, 9, 11, 13, 15], []]
+      },
+      // {
+      //   isActive: true,
+      //   name: "kick",
+      //   sequence: [[1, 3, 15], []]
+      // }
+      // ,{
+      //   isActive: true,
+      //   name: "kick",
+      //   sequence: [[1, 3,, 9, 11, 13, 15], []]
+      // }
       // {
       //   isActive: true,
       //   name: "kick",
@@ -107,8 +122,9 @@ class Sequencer extends Component {
   }
 
   soundObjReferences = [];
+
   constructor(props){
-    super();
+    super(props);
     this.state = {
       current16thNote:0,
       currentBar: 0,

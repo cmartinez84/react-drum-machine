@@ -41,6 +41,15 @@ class Sound extends Component {
     bypass: 0
   });
 
+  constructor(props){
+    super(props);
+    this.state = {
+    //   current16thNote:0,
+    //   currentBar: 0,
+    //   tempo: 120,
+    }
+  }
+
 
 
   //experimental shit...warning
@@ -61,11 +70,13 @@ class Sound extends Component {
 
 
   componentWillReceiveProps=(nextProps)=>{
+    console.log(nextProps.currentBar + " " + nextProps.current16thNote);
     if(nextProps.trackHasStarted){
       if(nextProps.current16thNote != this.prevBeat){
         var nextBeat = nextProps.current16thNote;
+        // prevents isPlaying from lingering
+        this.beatToPlay = null;
         if(this.sequence[this.props.currentBar].includes(nextBeat)){
-          console.log(nextProps.currentBar + " " + nextProps.current16thNote);
           this.sound.schedulePlay(nextProps.futureTickTime[0]);
           this.beatToPlay = nextBeat;
         }
@@ -202,6 +213,7 @@ isolateInstrument=()=>{
             _key={index +1}
             onPadClick={()=>{this.onPadClick(index + 1)}}
             currentSequence={this.sequence[this.props.currentBar]}
+            currentBar={this.props.currentBar}
 
             />
         )}
