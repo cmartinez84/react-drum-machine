@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import Tuna from 'tunajs';
-import Osc from './osc';
 import Sound from './sound';
-// import Bar from './bar.jsx';
 import Knob from './knob.js';
 import Volume from './volume.js';
 import BarCounter from './barCounter.jsx';
 import BeatCounter from './beatCounter';
 import * as soundLib from '../sounds/soundSources.js';
-
+import Metronome from './metronome';
 //react does not like undefined....even in conditionals...
 try{
   const AudioContext = window.AudioContext || window.webkitAudioContext || window.webkitAudioContext;
@@ -235,7 +233,6 @@ class Sequencer extends Component {
   render() {
     return (
       <div>
-
         <h1>{this.state.tempo} BPM</h1>
         <Knob onTempoChange={this.onTempoChange}/>
 
@@ -264,7 +261,7 @@ class Sequencer extends Component {
           )//end map
         }
         <BeatCounter current16thNote={this.state.current16thNote}/>
-        //controllers
+
         {this.track.instruments.map((instrument, index)=>
           <div className="instrument-controls">
             <p>{instrument.name}</p>
@@ -273,8 +270,8 @@ class Sequencer extends Component {
           </div>
           )
         }
-        <button onClick={this.beginScheduler}>Start</button>
-        <Osc
+        <button onClick={this.beginScheduler} >Start</button>
+        <Metronome
           audioCtx={this.audioCtx}
           current16thNote={this.state.current16thNote}
           futureTickTime={this.futureTickTime}/>

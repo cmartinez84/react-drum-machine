@@ -70,7 +70,7 @@ class Sound extends Component {
 
 
   componentWillReceiveProps=(nextProps)=>{
-    console.log(nextProps.currentBar + " " + nextProps.current16thNote);
+    // console.log(nextProps.currentBar + " " + nextProps.current16thNote);
     if(nextProps.trackHasStarted){
       if(nextProps.current16thNote != this.prevBeat){
         var nextBeat = nextProps.current16thNote;
