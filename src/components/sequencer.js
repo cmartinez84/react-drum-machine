@@ -33,7 +33,7 @@ class Sequencer extends Component {
   nextScheduledBar;
   isolatedInstrument = null;
   trackHasStarted = false;
-  allTuna =  [1,2]
+  allTuna =  generateTuna();
 // track.instruments[index].sequence[barIndex]
   track = {
     tempo: 120,
@@ -233,31 +233,17 @@ class Sequencer extends Component {
   }
   changeTuna = (e) => {
     var newTuna = e.target.value;
-    // var instIndex = e.target.dataset['instindex'];
-    var instIndex = 1;
+    var instIndex = e.target.dataset['instindex'];
     var instrument = this.soundObjReferences[instIndex];
-    // console.log(this.soundObjReferences);
     instrument.tunaFilter.disconnect();
-    instrument.tunaFilter = generateTuna(this.audioCtx, newTuna);
-
-    // soundObj.gainNode.connect(soundObj.tunaFilter);
-    // soundObj.tunaFilter.connect(this._audioCtx.destination)
-
-
-
-    // this.soundObjReferences[instIndex].gainNode.gain.value = newGain;
-    // this.soundObjReferences[instIndex].tunaFilter = this.soundObj.tunaPackage[newTuna]
-    // soundObj.tunaFilter = soundObj.tunaPackage['delay'];
-
+    instrument.tunaFilter = instrument.allTuna[newTuna];
   }
   //
   // {Array.apply(null, Array(7)).map((i)=>
   //   <Bar/>
   // )}
 
-  // {Object.keys(this.allTuna).map((tunaKey)=>
-  //   <option key={tunaKey} value={tunaKey}>{tunaKey}</option>
-  //   )}
+
   render() {
     return (
       <div>
@@ -297,11 +283,9 @@ class Sequencer extends Component {
                     instIndex={index}/>
             <p>Filter</p>
             <select onChange={this.changeTuna} data-instindex={index}>
-              <option value="delay">delay</option>
-              <option value="overdrive">overdrive</option>
-              <option value="wahwah">wahwah</option>
-              <option value="pingPongDelay">pingPongDelay</option>
-            </select>
+              {Object.keys(this.allTuna).map((tunaKey)=>
+                <option key={tunaKey} value={tunaKey}>{tunaKey}</option>
+                )}            </select>
           </div>
           )
         }

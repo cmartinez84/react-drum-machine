@@ -109,6 +109,7 @@ loadImpulse = function (path)
 
   audioFileLoader = (fileDirectory) =>{
       var soundObj = {};
+      soundObj.allTuna = generateTuna(this._audioCtx);
 
       this.loadImpulse(concertHall);
       soundObj.fileDirectory = fileDirectory;
@@ -130,7 +131,7 @@ loadImpulse = function (path)
       getSound.send();
       soundObj.gainNode = this._audioCtx.createGain();
       soundObj.gainNode.gain.value = 1;
-      soundObj.tunaFilter = generateTuna(this._audioCtx, "norm");
+      soundObj.tunaFilter = soundObj.allTuna["convolver"];
       console.log(soundObj.tunaFilter);
 
       this.filter.type="allpass";
