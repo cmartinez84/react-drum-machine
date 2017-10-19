@@ -13,7 +13,7 @@ setTempo = () =>{
   render() {
     return (
       <div>
-        <label for="tempoSlider">Tempo</label>
+        <label>Tempo</label>
         <input name="tempoSlider" id="tempoRange" type="range" min="10" max="200"   className="slider-width" onChange={ this.handleTempoChange}/>
         {this.setTempo()}
       </div>

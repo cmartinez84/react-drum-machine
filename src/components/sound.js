@@ -9,6 +9,8 @@ import Filter from './filter.jsx';
 import conlverPath from '../sounds/Space4ArtGallery.wav';
 import concertHall from '../sounds/ConcertHall.wav';
 import * as soundLib from '../sounds/soundSources.js';
+import {generateTuna} from './generateTuna.js';
+
 
 
 
@@ -87,7 +89,6 @@ class Sound extends Component {
 
   componentDidMount=()=>{
     this.props.soundObjReferences.push(this.sound);
-    console.log(this.props.soundObjReferences);
   }
 
 loadImpulse = function (path)
@@ -102,17 +103,17 @@ loadImpulse = function (path)
     }, function ( e ) { console.log( e ); } );
   };request.onerror = function ( e )
   {
-    console.log( e + "convolve!");
   };
   request.send();
 };
 
   audioFileLoader = (fileDirectory) =>{
       var soundObj = {};
+
       this.loadImpulse(concertHall);
-      console.log(this.convolver);
       soundObj.fileDirectory = fileDirectory;
 
+      // soundObj.tunaNode;
       var getSound = new XMLHttpRequest();
       getSound.open("GET", soundObj.fileDirectory, true);
       getSound.responseType = "arraybuffer";
@@ -129,6 +130,9 @@ loadImpulse = function (path)
       getSound.send();
       soundObj.gainNode = this._audioCtx.createGain();
       soundObj.gainNode.gain.value = 1;
+      soundObj.tunaFilter = generateTuna(this._audioCtx, "norm");
+      console.log(soundObj.tunaFilter);
+
       this.filter.type="allpass";
 
       soundObj.schedulePlay = (timeVal) => {
@@ -140,7 +144,9 @@ loadImpulse = function (path)
           // playSoundconnect(this.gainNode);
           // this.gainNode.connect(this._audioCtx.destination);
           playSound.connect(soundObj.gainNode);
-          soundObj.gainNode.connect(this._audioCtx.destination);
+          // soundObj.gainNode.connect(this._audioCtx.destination);
+          soundObj.gainNode.connect(soundObj.tunaFilter);
+          soundObj.tunaFilter.connect(this._audioCtx.destination)
           // playSound.connect(this._audioCtx.destination);
           // this.tremolo.connect(this.chorus);
           // this.chorus.connect(this._audioCtx.destination);

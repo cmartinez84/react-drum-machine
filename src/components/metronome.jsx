@@ -17,11 +17,10 @@ class Metronome extends Component {
       else if(nextBeat % 4 === 0) {
         this.oscLoader(200, nextProps.futureTickTime);
       }
-    }    
+    }
   }
 
   oscLoader = (frequency, timeVal) => {
-    // console.log(timeVal);
     let oscObj = this._audioCtx.createOscillator();
     oscObj.type = "triangle";
     oscObj.frequency.value = frequency;
@@ -29,6 +28,7 @@ class Metronome extends Component {
     oscObj.start(timeVal);
     oscObj.stop(timeVal +  .06);
   }
+
   toggleMetronome = () => {
     this.isMetronomeOn = !this.isMetronomeOn;
   }
@@ -37,7 +37,6 @@ class Metronome extends Component {
     return (
       <div>
         <button onClick={this.toggleMetronome}>Metronome</button>
-
       </div>
 
     );

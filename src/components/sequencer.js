@@ -7,6 +7,8 @@ import BarCounter from './barCounter.jsx';
 import BeatCounter from './beatCounter';
 import * as soundLib from '../sounds/soundSources.js';
 import Metronome from './metronome';
+import {generateTuna} from './generateTuna.js';
+
 //react does not like undefined....even in conditionals...
 try{
   const AudioContext = window.AudioContext || window.webkitAudioContext || window.webkitAudioContext;
@@ -31,6 +33,7 @@ class Sequencer extends Component {
   nextScheduledBar;
   isolatedInstrument = null;
   trackHasStarted = false;
+  allTuna =  [1,2]
 // track.instruments[index].sequence[barIndex]
   track = {
     tempo: 120,
@@ -129,6 +132,10 @@ class Sequencer extends Component {
       tempo: 120,
     }
   }
+  componentDidMount = () =>{
+    console.log(Object.keys(this.allTuna));
+
+  }
 
   futureTick =() =>{
     var secondsPerBeat = 60 / this.state.tempo;
@@ -224,12 +231,33 @@ class Sequencer extends Component {
       })
     }
   }
+  changeTuna = (e) => {
+    var newTuna = e.target.value;
+    // var instIndex = e.target.dataset['instindex'];
+    var instIndex = 1;
+    var instrument = this.soundObjReferences[instIndex];
+    // console.log(this.soundObjReferences);
+    instrument.tunaFilter.disconnect();
+    instrument.tunaFilter = generateTuna(this.audioCtx, newTuna);
 
+    // soundObj.gainNode.connect(soundObj.tunaFilter);
+    // soundObj.tunaFilter.connect(this._audioCtx.destination)
+
+
+
+    // this.soundObjReferences[instIndex].gainNode.gain.value = newGain;
+    // this.soundObjReferences[instIndex].tunaFilter = this.soundObj.tunaPackage[newTuna]
+    // soundObj.tunaFilter = soundObj.tunaPackage['delay'];
+
+  }
   //
   // {Array.apply(null, Array(7)).map((i)=>
   //   <Bar/>
   // )}
 
+  // {Object.keys(this.allTuna).map((tunaKey)=>
+  //   <option key={tunaKey} value={tunaKey}>{tunaKey}</option>
+  //   )}
   render() {
     return (
       <div>
@@ -267,6 +295,13 @@ class Sequencer extends Component {
             <p>{instrument.name}</p>
             <Volume handleGainChange={this.handleGainChange}
                     instIndex={index}/>
+            <p>Filter</p>
+            <select onChange={this.changeTuna} data-instindex={index}>
+              <option value="delay">delay</option>
+              <option value="overdrive">overdrive</option>
+              <option value="wahwah">wahwah</option>
+              <option value="pingPongDelay">pingPongDelay</option>
+            </select>
           </div>
           )
         }
@@ -286,42 +321,3 @@ class Sequencer extends Component {
 }
 
 export default Sequencer;
-
-
-
-//
-// //_______________________________________________________________
-// function futureTick(){
-//   var secondsPerBeat = 60/ tempo;
-//   futureTickTime += 0.25 * secondsPerBeat;
-//   current16thNote ++;
-//   current16thNote  > 16  ? current16thNote = 1: '';
-// }
-//
-// //_______________________________________________________________
-// function scheduleNote(beatDivisionNumber, time){
-//   track.includes(beatDivisionNumber) ? kick.play(): '';
-// }
-//
-// function scheduler(){
-//   while(futureTickTime < audioContext.currentTime + 0.1){
-//     scheduleNote(current16thNote, futureTickTime);
-//     futureTick();
-//   }
-//   timerID = window.setTimeout(scheduler, 50);
-// }
-//
-// function play(){
-//   isPlaying = !isPlaying;
-//
-//   if(isPlaying){
-//     current16thNote = 1;
-//     futureTickTime = audioContext.currentTime;
-//     scheduler();
-//     return "stop";
-//   }
-//   else{
-//     window.clearTimeout(timerID);
-//     return   "play";
-//   }
-// }
