@@ -132,9 +132,6 @@ loadImpulse = function (path)
       soundObj.gainNode = this._audioCtx.createGain();
       soundObj.gainNode.gain.value = 1;
       soundObj.tunaFilter = soundObj.allTuna["convolver"];
-      console.log(soundObj.tunaFilter);
-
-      this.filter.type="allpass";
 
       soundObj.schedulePlay = (timeVal) => {
           this.isPLaying = true;
@@ -144,8 +141,9 @@ loadImpulse = function (path)
           // // this.convolver.connect(this.filter);
           // playSoundconnect(this.gainNode);
           // this.gainNode.connect(this._audioCtx.destination);
-          playSound.connect(soundObj.gainNode);
+          playSound.connect(this.filter);
           // soundObj.gainNode.connect(this._audioCtx.destination);
+          this.filter.connect(soundObj.gainNode);
           soundObj.gainNode.connect(soundObj.tunaFilter);
           soundObj.tunaFilter.connect(this._audioCtx.destination)
           // playSound.connect(this._audioCtx.destination);

@@ -11,15 +11,15 @@ export function generateTuna(audioCtx) {
        bypass: 0
      });
     var delay = new tuna.Delay({
-      feedback: 0.45,    //0 to 1+
-      delayTime: 150,    //1 to 10000 milliseconds
+      feedback: .4,    //0 to 1+
+      delayTime: 2000,    //1 to 10000 milliseconds
       wetLevel: 0.25,    //0 to 1+
       dryLevel: 1,       //0 to 1+
-      cutoff: 2000,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
+      cutoff: 1000,      //cutoff frequency of the built in lowpass-filter. 20 to 22050
       bypass: 0
     });
     var bitcrusher = new tuna.Bitcrusher({
-        bits: 4,          //1 to 16
+        bits: 16,          //1 to 16
         normfreq: 0.1,    //0 to 1
         bufferSize: 4096  //256 to 16384
     });
@@ -45,10 +45,10 @@ export function generateTuna(audioCtx) {
   });
 
   var overdrive = new tuna.Overdrive({
-        outputGain: 0.1,         //0 to 1+
+        outputGain: 0.4,         //0 to 1+
         drive: 0.3,              //0 to 1
         curveAmount: .1,          //0 to 1
-        algorithmIndex: 0,       //0 to 5, selects one of our drive algorithms
+        algorithmIndex: 4,       //0 to 5, selects one of our drive algorithms
         bypass: 0
     });
   var phaser = new tuna.Phaser({

@@ -41,84 +41,54 @@ class Sequencer extends Component {
       {
         isActive: true,
         name: "kick",
-        sequence: [[1, 3, 5, 7, 9, 11, 13, 15], []]
+        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
-        name: "kick",
-        sequence: [[1, 3, 5, 7, 9, 11, 13, 15], []]
+        name: "snare",
+        sequence: [[1,10], [4, 5, ,8, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
-        name: "kick",
-        sequence: [[1, 3, 5, 7, 9, 11, 13, 15], []]
+        name: "hihat",
+        sequence: [[1,5, 6], [4, 5, 6],[],[],[],[],[],[]],
       },
       {
         isActive: true,
-        name: "kick",
-        sequence: [[1, 3, 5, 7, 9, 11, 13, 15], []]
+        name: "shaker",
+        sequence: [[1, 2, 3, 9], [4, 5, 6],[],[],[],[],[],[]],
       },
-      // {
-      //   isActive: true,
-      //   name: "kick",
-      //   sequence: [[1, 3, 15], []]
-      // }
-      // ,{
-      //   isActive: true,
-      //   name: "kick",
-      //   sequence: [[1, 3,, 9, 11, 13, 15], []]
-      // }
-      // {
-      //   isActive: true,
-      //   name: "kick",
-      //   sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      // },
-      // {
-      //   isActive: true,
-      //   name: "snare",
-      //   sequence: [[1,10], [4, 5, ,8, 6],[],[],[],[],[],[]],
-      // },
-      // {
-      //   isActive: true,
-      //   name: "hihat",
-      //   sequence: [[1,5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      // },
-      // {
-      //   isActive: true,
-      //   name: "shaker",
-      //   sequence: [[1, 2, 3, 9], [4, 5, 6],[],[],[],[],[],[]],
-      // },
-      // {
-      //   isActive: true,
-      //   name: "crackle",
-      //   sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      // },
-      // {
-      //   isActive: true,
-      //   name: "snare",
-      //   sequence: [[1, 2,8, 12, 6], [4, 5, 6],[],[],[],[],[],[]],
-      // },
-      // {
-      //   isActive: true,
-      //   name: "meow",
-      //   sequence: [[], [],[],[],[],[],[],[]],
-      // },
-      // {
-      //   isActive: true,
-      //   name: "shaker",
-      //   sequence: [[1, 2,7, 9, 6], [4, 5, 6],[],[],[],[],[],[]],
-      // },
-      // {
-      //   isActive: true,
-      //   name: "thump",
-      //   sequence: [[1, 13, 6], [2, 15, 16],[],[],[],[],[],[]],
-      // },
-      // {
-      //   isActive: true,
-      //   name: "heyyo",
-      //   sequence: [[4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      // },
-    ],
+      {
+        isActive: true,
+        name: "crackle",
+        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
+      },
+      {
+        isActive: true,
+        name: "snare",
+        sequence: [[1, 2,8, 12, 6], [4, 5, 6],[],[],[],[],[],[]],
+      },
+      {
+        isActive: true,
+        name: "meow",
+        sequence: [[], [],[],[],[],[],[],[]],
+      },
+      {
+        isActive: true,
+        name: "shaker",
+        sequence: [[1, 2,7, 9, 6], [4, 5, 6],[],[],[],[],[],[]],
+      },
+      {
+        isActive: true,
+        name: "thump",
+        sequence: [[1, 13, 6], [2, 15, 16],[],[],[],[],[],[]],
+      },
+      {
+        isActive: true,
+        name: "heyyo",
+        sequence: [[4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
+      },
+    ]
 
   }
 
@@ -246,7 +216,7 @@ class Sequencer extends Component {
 
   render() {
     return (
-      <div>
+      <div className="sequencer">
         <h1>{this.state.tempo} BPM</h1>
         <Knob onTempoChange={this.onTempoChange}/>
 

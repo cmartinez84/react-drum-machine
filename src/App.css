@@ -1,18 +1,31 @@
-
-.pad{
-  background: pink;
+:root{
+  --void: #0E0B16;
+  --fuschia: #A239CA;
+  --jewel: #4717F6;
+  --stark: #E7DFDD;
+}
+body{
+  background: var(--void);
   color: white;
-  border: 1px solid black;
+  /*color: var(--stark) !important;*/
+}
+.pad{
+  background: #2c2c33;
+  color: white;
+  border: 0px solid black;
   width: 30px;
   height: 30px;
   margin: 1px;
+  border-radius: 4px;
 }
 .pressed{
-  box-shadow: inset 3px 3px 5px 6px white;
+  box-shadow: inset 0px 0px 16px -2px #fbf5f5,
+  1px 1px 17px 4px rgba(251, 31, 93, .6);
+  background: #FB1F7D;
 
 }
 .lit{
-  background: red;
+  background: #eabfbf;
 }
 .slider-width{
   width: 800px;
@@ -100,4 +113,9 @@ div.beat-dots-conatiner{
 }
 .isolator{
   margin-right: 3px;
+}
+
+
+.sequencer{
+background: #28282b;
 }
