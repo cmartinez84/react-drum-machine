@@ -11,7 +11,7 @@ class App extends Component {
       <div className="App">
 
         <header className="App-header" >
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">JS-BEAT 1000</h1>
         </header>
             <Sequencer/>
       </div>

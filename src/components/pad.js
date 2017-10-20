@@ -13,7 +13,9 @@ class Pad extends Component {
       isPlaying: false,
     }
   }
-
+  componentDidMount(){
+    console.log(this.props._key);
+  }
   componentWillReceiveProps=(nextProps)=>{
     if(nextProps.beatToPlay == this.props._key ){
       this.setState({isPlaying: true});
@@ -41,9 +43,7 @@ class Pad extends Component {
   render() {
 
     return (
-      <button className={`pad ${this.state.isPlaying === true ? 'lit':'cat'} ${this.state.isPressed ? 'pressed': ''}`} onClick={this.onPadClick}>
-
-
+      <button className={`pad ${this.state.isPlaying === true ? 'lit':'cat'} ${this.state.isPressed ? 'pressed': ''} ${this.props._key % 4 ===0 && 'bar-end'}`} onClick={this.onPadClick}>
       </button>
 
 

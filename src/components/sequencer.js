@@ -28,7 +28,7 @@ class Sequencer extends Component {
   futureTickTime = 0.0;
   timerID = 0;//_______________________________________________________________
   interval;
-  barsIndexCount = 1;
+  barsIndexCount = 7;
   isBarChangeScheduled = false;
   nextScheduledBar;
   isolatedInstrument = null;
@@ -100,6 +100,7 @@ class Sequencer extends Component {
       current16thNote:0,
       currentBar: 0,
       tempo: 120,
+      barsToPlay: [];
     }
   }
   componentDidMount = () =>{
@@ -170,12 +171,13 @@ class Sequencer extends Component {
       current16thNote: 1
     });
     this.isBarChangeScheduled = false;
-
   }
+
   scheduleBarChange = (barIndex) =>{
     this.isBarChangeScheduled = true;
     this.nextScheduledBar = barIndex;
   }
+
   isolateInstrument = (instrumentIndex) =>{
     if(this.isolatedInstrument === instrumentIndex){
       this.isolatedInstrument = null;
@@ -213,38 +215,54 @@ class Sequencer extends Component {
   //   <Bar/>
   // )}
 
-
+    // <BeatCounter current16thNote={this.state.current16thNote}/>
   render() {
     return (
-      <div className="sequencer">
-        <h1>{this.state.tempo} BPM</h1>
-        <Knob onTempoChange={this.onTempoChange}/>
+      <div class="container">
+        <div className="top-row">
+          <div className="sequencer">
+            {this.track.instruments.map((instrument, i)=>
+            <div>
+            <Sound
+              trackHasStarted={this.trackHasStarted}
+              soundObjReferences={this.soundObjReferences}
+              instrument={instrument}
+              instrumentKey={i}
+              audioCtx={this.audioCtx}
+              current16thNote={this.state.current16thNote}
+              currentBar={this.state.currentBar}
+              futureTickTime={[this.futureTickTime]}
+              path={soundLib.sources[instrument.name]}
+              sequence={instrument.sequence}
+              key={i}
+              name={instrument.name}
+              changeSequence={this.changeSequence}
+              changeTrackObj={this.changeTrackObj}
+              isolatedInstrument={this.isolatedInstrument}
+              isolateInstrument={this.isolateInstrument}
+              />
+          </div>
 
-        {this.track.instruments.map((instrument, i)=>
-        <div>
+            )//end map
+          }
 
-        <Sound
-          trackHasStarted={this.trackHasStarted}
-          soundObjReferences={this.soundObjReferences}
-          instrument={instrument}
-          instrumentKey={i}
-          audioCtx={this.audioCtx}
-          current16thNote={this.state.current16thNote}
-          currentBar={this.state.currentBar}
-          futureTickTime={[this.futureTickTime]}
-          path={soundLib.sources[instrument.name]}
-          sequence={instrument.sequence}
-          key={i}
-          name={instrument.name}
-          changeSequence={this.changeSequence}
-          changeTrackObj={this.changeTrackObj}
-          isolatedInstrument={this.isolatedInstrument}
-          isolateInstrument={this.isolateInstrument}
-          />
-      </div>
-          )//end map
-        }
-        <BeatCounter current16thNote={this.state.current16thNote}/>
+
+        </div>
+        <div className="main-controls">
+          <h1> Main Controls</h1>
+          <p> Tempo: {this.state.tempo}</p>
+          <Knob onTempoChange={this.onTempoChange}/>
+            <Metronome
+              audioCtx={this.audioCtx}
+              current16thNote={this.state.current16thNote}
+              futureTickTime={this.futureTickTime}/>
+            <BarCounter
+              barsIndexCount={this.barsIndexCount}
+              currentBar={this.state.currentBar}
+              scheduleBarChange={this.scheduleBarChange}/>
+        </div>
+
+        </div>
 
         {this.track.instruments.map((instrument, index)=>
           <div className="instrument-controls">
@@ -260,14 +278,7 @@ class Sequencer extends Component {
           )
         }
         <button onClick={this.beginScheduler} >Start</button>
-        <Metronome
-          audioCtx={this.audioCtx}
-          current16thNote={this.state.current16thNote}
-          futureTickTime={this.futureTickTime}/>
-        <BarCounter
-          barsIndexCount={this.barsIndexCount}
-          currentBar={this.state.currentBar}
-          scheduleBarChange={this.scheduleBarChange}/>
+
       </div>
 
     );

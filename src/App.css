@@ -18,18 +18,11 @@ body{
   margin: 1px;
   border-radius: 4px;
 }
-.pressed{
-  box-shadow: inset 0px 0px 16px -2px #fbf5f5,
-  1px 1px 17px 4px rgba(251, 31, 93, .6);
-  background: #FB1F7D;
 
-}
-.lit{
-  background: #eabfbf;
-}
-.slider-width{
+
+/*.slider-width{
   width: 800px;
-}
+}*/
 /*#tempoRange[type=range]::-webkit-slider-runnable-track {
     width: 300px;
     height: 5px;
@@ -47,22 +40,25 @@ body{
     background: yellow;
     margin-top: -4px;
 }*/
-.volume-slider{
+/*.volume-slider{
 width: 80px;
-}
+}*/
 
 .instrument-container{
   /*border: 1px solid black;*/
 }
 
-
-
 .beatLit{
   color: red;
 }
 .bar-counter{
-  font-size: 50px;
+  font-size: 25px;
   color: black;
+
+  background: #2c2c33;
+  color: white;
+  border: 0px solid black;
+  border-radius: 1px;
 }
 .bar-counter-lit{
   color: red;
@@ -118,4 +114,41 @@ div.beat-dots-conatiner{
 
 .sequencer{
 background: #28282b;
+padding: 25px;
+border-radius: 8px;
+}
+.bar-end{
+  background: #2C2C40;
+}
+
+
+.pressed{
+  box-shadow: inset 0px 0px 16px -2px #fbf5f5,
+  1px 1px 17px 4px rgba(251, 31, 93, .6);
+  background: #FB1F7D;
+}
+.lit{
+  background: #eabfbf;
+}
+.top-row > *{
+display: inline-block;
+}
+.container{
+  background: #28282b;
+}
+.main-controls{
+  background: #E7DFDD;
+  position: absolute;
+  top: 27px;
+  border-radius: 3px;
+  padding: 12px;
+  color: #28282c;
+}
+.top-row{
+  position: relative;
+}
+.bar-counter-pressed{
+  box-shadow: inset 0px 0px 16px -2px #fbf5f5, 0 0px 15px 1px rgba(251, 31, 93, .3);
+
+  background: #FB1F7D;
 }
