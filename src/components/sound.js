@@ -11,11 +11,6 @@ import concertHall from '../sounds/ConcertHall.wav';
 import * as soundLib from '../sounds/soundSources.js';
 import {generateTuna} from './generateTuna.js';
 
-
-
-
-
-
 class Sound extends Component {
   _audioCtx = this.props.audioCtx;
   tuna = new Tuna(this._audioCtx);
@@ -28,20 +23,6 @@ class Sound extends Component {
   filter = this._audioCtx.createBiquadFilter();
   convolver = this._audioCtx.createConvolver();
 
-  chorus = new this.tuna.Chorus({
-    rate: 1.5,
-    feedback: 0.2,
-    delay: 0.0045,
-    bypass: 0
-  });
-
-
-  tremolo = new this.tuna.Tremolo({
-    intensity: 0.3,    //0 to 1
-    rate: 4,         //0.001 to 8
-    stereoPhase: 0,    //0 to 180
-    bypass: 0
-  });
 
   constructor(props){
     super(props);
@@ -52,27 +33,7 @@ class Sound extends Component {
     }
   }
 
-
-
-  //experimental shit...warning
-  // distortion = this._audioCtx.createWaveShaper();
-  // makeDistortionCurve = (amount)=> {
-  //   var k = typeof amount === 'number' ? amount : 50,
-  //     n_samples = 44100,
-  //     curve = new Float32Array(n_samples),
-  //     deg = Math.PI / 180,
-  //     i = 1,
-  //     x;
-  //   for ( ; i < n_samples; ++i ) {
-  //     x = i * 2 / n_samples - 1;
-  //     curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
-  //   }
-  //   return curve;
-  // };
-
-
   componentWillReceiveProps=(nextProps)=>{
-    // console.log(nextProps.currentBar + " " + nextProps.current16thNote);
     if(nextProps.trackHasStarted){
       if(nextProps.current16thNote != this.prevBeat){
         var nextBeat = nextProps.current16thNote;
@@ -162,11 +123,9 @@ loadImpulse = function (path)
 
   handleGainChange = (newGain) =>{
     this.gainNode.gain.value = newGain;
-    console.log(newGain);
   }
   handleFilterChange = (params) =>{
     this.filter.type = params.type;
-    console.log(this.filter);
   }
   sound = this.audioFileLoader(this.props.path);
 //
@@ -219,7 +178,6 @@ isolateInstrument=()=>{
             onPadClick={()=>{this.onPadClick(index + 1)}}
             currentSequence={this.sequence[this.props.currentBar]}
             currentBar={this.props.currentBar}
-
             />
         )}
       </div>
@@ -228,5 +186,4 @@ isolateInstrument=()=>{
     );
   }
 }
-// isPressed={this.sequence[this.props.currentBar].includes(index + 1)
 export default Sound;

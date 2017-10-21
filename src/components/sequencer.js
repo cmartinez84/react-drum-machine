@@ -5,9 +5,11 @@ import Knob from './knob.js';
 import Volume from './volume.js';
 import BarCounter from './barCounter.jsx';
 import BeatCounter from './beatCounter';
+import BarViewControl from './barViewControl';
 import * as soundLib from '../sounds/soundSources.js';
 import Metronome from './metronome';
 import {generateTuna} from './generateTuna.js';
+import {track} from './track.js';
 
 //react does not like undefined....even in conditionals...
 try{
@@ -28,70 +30,13 @@ class Sequencer extends Component {
   futureTickTime = 0.0;
   timerID = 0;//_______________________________________________________________
   interval;
-  barsIndexCount = 7;
   isBarChangeScheduled = false;
   nextScheduledBar;
   isolatedInstrument = null;
   trackHasStarted = false;
   allTuna =  generateTuna();
-// track.instruments[index].sequence[barIndex]
-  track = {
-    tempo: 120,
-    instruments: [
-      {
-        isActive: true,
-        name: "kick",
-        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "snare",
-        sequence: [[1,10], [4, 5, ,8, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "hihat",
-        sequence: [[1,5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "shaker",
-        sequence: [[1, 2, 3, 9], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "crackle",
-        sequence: [[1, 2, 3, 4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "snare",
-        sequence: [[1, 2,8, 12, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "meow",
-        sequence: [[], [],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "shaker",
-        sequence: [[1, 2,7, 9, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "thump",
-        sequence: [[1, 13, 6], [2, 15, 16],[],[],[],[],[],[]],
-      },
-      {
-        isActive: true,
-        name: "heyyo",
-        sequence: [[4, 5, 6], [4, 5, 6],[],[],[],[],[],[]],
-      },
-    ]
-
-  }
-
+  barsIndexCount = 7;
+  isBarViewLocked = false;
   soundObjReferences = [];
 
   constructor(props){
@@ -100,11 +45,11 @@ class Sequencer extends Component {
       current16thNote:0,
       currentBar: 0,
       tempo: 120,
-      barsToPlay: [];
+      barSequence: [true, false, false, false, false, false, false, false],
+      lockedBarView: null,
     }
   }
   componentDidMount = () =>{
-    console.log(Object.keys(this.allTuna));
 
   }
 
@@ -115,18 +60,7 @@ class Sequencer extends Component {
     this.futureTickTime += 0.25 * secondsPerBeat;
     this.setState({ current16thNote: _current16thNote});
     if(_current16thNote === 16){
-      if(this.isBarChangeScheduled === false){
-        if(this.state.currentBar === this.barsIndexCount){
-          this.setState({currentBar: 0})
-        }
-        else{
-          const nextBar = this.state.currentBar +1;
-          this.setState({currentBar: nextBar});
-        }
-      }
-      else{
-        this.changeBarView();
-      }
+      this.rotateBar();
     }
   }
 
@@ -148,12 +82,12 @@ class Sequencer extends Component {
   }
   changeSequence=(padKey, instKey)=>{
     var barKey = this.state.currentBar;
-    if(this.track.instruments[instKey].sequence[barKey].includes(padKey)){
-      const index = this.track.instruments[instKey].sequence[barKey].indexOf(padKey);
-      this.track.instruments[instKey].sequence[barKey].splice(index, 1);
+    if(track.instruments[instKey].sequence[barKey].includes(padKey)){
+      const index = track.instruments[instKey].sequence[barKey].indexOf(padKey);
+      track.instruments[instKey].sequence[barKey].splice(index, 1);
     }
     else{
-      this.track.instruments[instKey].sequence[barKey].push(padKey);
+      track.instruments[instKey].sequence[barKey].push(padKey);
     }
   }
 
@@ -161,7 +95,7 @@ class Sequencer extends Component {
     this.soundObjReferences[instIndex].gainNode.gain.value = newGain;
   }
   changeTrackObj = (instrumentName, instrumentIndex) =>{
-    this.track.instruments[instrumentIndex].name = instrumentName;
+    track.instruments[instrumentIndex].name = instrumentName;
 
   }
   changeBarView = () => {
@@ -210,18 +144,40 @@ class Sequencer extends Component {
     instrument.tunaFilter.disconnect();
     instrument.tunaFilter = instrument.allTuna[newTuna];
   }
+//rt
+  rotateBar = () => {
+    var testNextBar = this.state.barSequence.indexOf(true, this.state.currentBar + 1);
+    if(testNextBar === -1){
+      var nextBar = this.state.barSequence.indexOf(true);
+    }
+    else {
+      var nextBar =testNextBar;
+    }
+    this.setState({currentBar: nextBar});
+  }
+  toggleBarSequence = (index) =>{
+    var newBarSequence = this.state.barSequence.slice();
+    newBarSequence[index] = !newBarSequence[index];
+    // newBarSequence[index] = 22;
+    this.setState({barSequence: newBarSequence});
+  }
   //
+
   // {Array.apply(null, Array(7)).map((i)=>
   //   <Bar/>
   // )}
+  lockBarView = (indexOfLockedBar) =>{
+    this.isBarViewLocked = !this.isBarViewLocked;
+    console.log(indexOfLockedBar);
 
-    // <BeatCounter current16thNote={this.state.current16thNote}/>
+  }
+
   render() {
     return (
       <div class="container">
         <div className="top-row">
           <div className="sequencer">
-            {this.track.instruments.map((instrument, i)=>
+            {track.instruments.map((instrument, i)=>
             <div>
             <Sound
               trackHasStarted={this.trackHasStarted}
@@ -245,9 +201,8 @@ class Sequencer extends Component {
 
             )//end map
           }
-
-
         </div>
+
         <div className="main-controls">
           <h1> Main Controls</h1>
           <p> Tempo: {this.state.tempo}</p>
@@ -257,14 +212,31 @@ class Sequencer extends Component {
               current16thNote={this.state.current16thNote}
               futureTickTime={this.futureTickTime}/>
             <BarCounter
-              barsIndexCount={this.barsIndexCount}
+              barSequence={this.state.barSequence}
               currentBar={this.state.currentBar}
-              scheduleBarChange={this.scheduleBarChange}/>
+              scheduleBarChange={this.scheduleBarChange}
+              toggleBarSequence={this.toggleBarSequence}
+              />
         </div>
 
         </div>
+        <div className="bottom-row">
+          <div className="col">
+            <BarViewControl
+              currentBar={this.state.currentBar}
+              lockBarView={this.lockBarView}
+              barSequence={this.state.barSequence}/>
+          </div>
+          <div className="col">
+            <BeatCounter
+              isBarViewLocked={this.isBarViewLocked}
+              current16thNote={this.state.current16thNote}
+              />
+          </div>
 
-        {this.track.instruments.map((instrument, index)=>
+        </div>
+
+        {track.instruments.map((instrument, index)=>
           <div className="instrument-controls">
             <p>{instrument.name}</p>
             <Volume handleGainChange={this.handleGainChange}

@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 class Pad extends Component {
-  // audioCtx = this.props.audioCtx;
-  // isPlaying = false;
-  // isPressed = false;
-  // isPressed={this.sequence[this.props.currentBar].includes(index + 1)
 
   constructor(props){
     super(props);
@@ -14,7 +10,6 @@ class Pad extends Component {
     }
   }
   componentDidMount(){
-    console.log(this.props._key);
   }
   componentWillReceiveProps=(nextProps)=>{
     if(nextProps.beatToPlay == this.props._key ){
@@ -37,13 +32,14 @@ class Pad extends Component {
     this.setState({isPressed: !this.state.isPlaying});
     this.props.onPadClick();
   }
-  // <button className={"pad" + (this.isPlaying ?' lit' : '') } onClick={this.props.onPadClick}>
-  // <button className={"pad" + (this.state.isPlaying ?' lit' : '') } onClick={this.onPadClick}>
+
 
   render() {
 
     return (
-      <button className={`pad ${this.state.isPlaying === true ? 'lit':'cat'} ${this.state.isPressed ? 'pressed': ''} ${this.props._key % 4 ===0 && 'bar-end'}`} onClick={this.onPadClick}>
+      <button
+        className={`pad ${this.state.isPlaying === true ? 'lit':''} ${this.state.isPressed ? 'pressed': ''} ${this.props._key % 4 === 0 && 'bar-end'}`}
+        onClick={this.onPadClick}>
       </button>
 
 

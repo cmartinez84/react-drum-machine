@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 
 class BarCounter extends Component {
 
-  dummyArray = [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6];
-  spaceArray = [3, 7, 11];
-  numberOfbarsInTrack = this.props.barsIndexCount +1;
 
   constructor(props){
     super(props);
@@ -14,8 +11,10 @@ class BarCounter extends Component {
   }
 
   onBarNumberClick = (barIndex) => {
-    this.props.scheduleBarChange(barIndex);
+    // this.props.scheduleBarChange(barIndex);
+    this.props.toggleBarSequence(barIndex);
     this.togglePressed(barIndex);
+
   }
   ///use immmutable JS in future
   togglePressed =(index) =>{
@@ -33,9 +32,9 @@ class BarCounter extends Component {
   render() {
     const chris = "chris";
     return (
-      <div>{chris}
+      <div>
         <div className="bar-counter-row"></div>
-        {Array.apply(null, Array(this.numberOfbarsInTrack)).map((i, index)=>
+        {this.props.barSequence.map((i, index)=>
           <button
             className={`bar-counter  ${this.props.currentBar === index && "bar-counter-lit"} ${this.state.isPressed.includes(index) && 'bar-counter-pressed'}`}
             key={index}
