@@ -7,27 +7,33 @@ class BarViewControl extends Component {
     super(props);
     this.state = {
       isActive: false,
-      indexOfLockedBar: 2,
+      indexOfLockedBar: 0,
     }
   }
-  componentWillReceiveProps=(nextProps)=>{
-    var newBar = nextProps.currentBar;
-  }
+  // componentWillReceiveProps=(nextProps)=>{
+  //   var newBar = nextProps.currentBar;
+  // }
   toggleViewLock = () =>{
     this.setState({isActive: !this.state.isActive});
     this.props.lockBarView(this.state.indexOfLockedBar);
-    console.log(this.props);
   }
+  changeBarView =(e)=>{
+    var direction = parseInt(e.target.dataset.direction);
+    this.props.changeBarView(direction);
+  }
+  //dadadads
   render() {
     return (
       <div>
-        <button className={` ${this.state.isActive && "bar-lock-active"}`}onClick={this.toggleViewLock}>View Bar</button>
+        <button className={` ${this.state.isActive && "bar-lock-active"}`}
+                onClick={this.toggleViewLock}>View Bar</button>
         <p>
-          <span>&larr;</span>
+          <span data-direction="-1"
+                onClick={this.changeBarView}>&larr;</span>
             <button>
-              {this.state.indexOfLockedBar}
-              </button>
-              <span>&rarr;</span>
+              {this.props.indexOfLockedBar}
+            </button>
+              <span data-direction="1" onClick={this.changeBarView}>&rarr;</span>
         </p>
       </div>
     );

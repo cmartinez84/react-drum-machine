@@ -36,7 +36,7 @@ class Sequencer extends Component {
   trackHasStarted = false;
   allTuna =  generateTuna();
   barsIndexCount = 7;
-  isBarViewLocked = false;
+  // isBarViewLocked = false;
   soundObjReferences = [];
 
   constructor(props){
@@ -46,7 +46,8 @@ class Sequencer extends Component {
       currentBar: 0,
       tempo: 120,
       barSequence: [true, false, false, false, false, false, false, false],
-      lockedBarView: null,
+      indexOfLockedBar: 0,
+      isBarViewLocked: false
     }
   }
   componentDidMount = () =>{
@@ -80,8 +81,9 @@ class Sequencer extends Component {
   onTempoChange =(newTempo)=>{
     this.setState({tempo: newTempo});
   }
-  changeSequence=(padKey, instKey)=>{
-    var barKey = this.state.currentBar;
+  changeSequence=(padKey, instKey, sequenceIndex)=>{
+    var barKey =  this.state.isBarViewLocked ? this.state.indexOfLockedBar : this.state.currentBar;
+    console.log(barKey);
     if(track.instruments[instKey].sequence[barKey].includes(padKey)){
       const index = track.instruments[instKey].sequence[barKey].indexOf(padKey);
       track.instruments[instKey].sequence[barKey].splice(index, 1);
@@ -98,13 +100,25 @@ class Sequencer extends Component {
     track.instruments[instrumentIndex].name = instrumentName;
 
   }
-  changeBarView = () => {
-    const nextBar = this.nextScheduledBar;
-    this.setState({
-      currentBar: nextBar,
-      current16thNote: 1
-    });
-    this.isBarChangeScheduled = false;
+  // changeBarView = () => {
+  //   const nextBar = this.nextScheduledBar;
+  //   this.setState({
+  //     currentBar: nextBar,
+  //     current16thNote: 1
+  //   });
+  //   this.isBarChangeScheduled = false;
+  // }
+  changeBarView=(n)=>{
+    // var oldIndex = this.state.indexOfLockedBar;
+    var newIndex = this.state.indexOfLockedBar += n;
+    console.log(newIndex);
+    if(newIndex >8){
+      newIndex = 8
+    }
+    else if(newIndex < 0){
+      newIndex = 0;
+    }
+    this.setState({indexOfLockedBar: newIndex})
   }
 
   scheduleBarChange = (barIndex) =>{
@@ -166,10 +180,9 @@ class Sequencer extends Component {
   // {Array.apply(null, Array(7)).map((i)=>
   //   <Bar/>
   // )}
-  lockBarView = (indexOfLockedBar) =>{
-    this.isBarViewLocked = !this.isBarViewLocked;
-    console.log(indexOfLockedBar);
-
+  lockBarView = (index) =>{
+    this.setState({isBarViewLocked: !this.state.isBarViewLocked});
+    this.setState({indexOfLockedBar: index });
   }
 
   render() {
@@ -196,6 +209,8 @@ class Sequencer extends Component {
               changeTrackObj={this.changeTrackObj}
               isolatedInstrument={this.isolatedInstrument}
               isolateInstrument={this.isolateInstrument}
+              indexOfLockedBar={this.state.indexOfLockedBar}
+              isBarViewLocked={this.state.isBarViewLocked}
               />
           </div>
 
@@ -225,7 +240,10 @@ class Sequencer extends Component {
             <BarViewControl
               currentBar={this.state.currentBar}
               lockBarView={this.lockBarView}
-              barSequence={this.state.barSequence}/>
+              barSequence={this.state.barSequence}
+              changeBarView={this.changeBarView}
+              indexOfLockedBar={this.state.indexOfLockedBar}
+              />
           </div>
           <div className="col">
             <BeatCounter

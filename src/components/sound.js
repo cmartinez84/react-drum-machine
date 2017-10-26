@@ -10,11 +10,13 @@ import conlverPath from '../sounds/Space4ArtGallery.wav';
 import concertHall from '../sounds/ConcertHall.wav';
 import * as soundLib from '../sounds/soundSources.js';
 import {generateTuna} from './generateTuna.js';
+import {track} from './track.js';
+
 
 class Sound extends Component {
   _audioCtx = this.props.audioCtx;
   tuna = new Tuna(this._audioCtx);
-  sequence = this.props.sequence;
+  allSequences = this.props.sequence;
   name = this.props.name;
   isPlaying = false;
   prevBeat;
@@ -22,24 +24,30 @@ class Sound extends Component {
   gainNode;
   filter = this._audioCtx.createBiquadFilter();
   convolver = this._audioCtx.createConvolver();
+  sequenceToDisplay = this.allSequences[this.props.currentBar];
 
 
   constructor(props){
     super(props);
     this.state = {
-    //   current16thNote:0,
-    //   currentBar: 0,
-    //   tempo: 120,
     }
   }
 
   componentWillReceiveProps=(nextProps)=>{
+    if(nextProps.isBarViewLocked){
+      this.sequenceToDisplay = this.allSequences[nextProps.indexOfLockedBar];
+    }
+    else {
+      this.sequenceToDisplay = this.allSequences[nextProps.currentBar];
+    }
+    console.log(this.sequenceToDisplay);
+
     if(nextProps.trackHasStarted){
       if(nextProps.current16thNote != this.prevBeat){
         var nextBeat = nextProps.current16thNote;
         // prevents isPlaying from lingering
         this.beatToPlay = null;
-        if(this.sequence[this.props.currentBar].includes(nextBeat)){
+        if(this.allSequences[this.props.currentBar].includes(nextBeat)){
           this.sound.schedulePlay(nextProps.futureTickTime[0]);
           this.beatToPlay = nextBeat;
         }
@@ -102,9 +110,9 @@ loadImpulse = function (path)
           // // this.convolver.connect(this.filter);
           // playSoundconnect(this.gainNode);
           // this.gainNode.connect(this._audioCtx.destination);
-          playSound.connect(this.filter);
+          playSound.connect(soundObj.gainNode);
           // soundObj.gainNode.connect(this._audioCtx.destination);
-          this.filter.connect(soundObj.gainNode);
+          // this.filter.connect(soundObj.gainNode);
           soundObj.gainNode.connect(soundObj.tunaFilter);
           soundObj.tunaFilter.connect(this._audioCtx.destination)
           // playSound.connect(this._audioCtx.destination);
@@ -116,9 +124,9 @@ loadImpulse = function (path)
       return soundObj;
   }
   //add or remove beat to track
-  onPadClick = (padKey) =>{
+  onPadClick = (padKey, sequenceIndex) =>{
     var instKey = this.props.instrumentKey;
-    this.props.changeSequence(padKey, instKey);
+    this.props.changeSequence(padKey, instKey, sequenceIndex);
   }
 
   handleGainChange = (newGain) =>{
@@ -156,28 +164,32 @@ isolateInstrument=()=>{
     return (
       <div className="instrument-container" >
         <span className="instrument-pad-name"><p>{this.props.name}</p></span>
-          <button onClick={this.isolateInstrument}className="isolator">i</button>
+          <button onClick={this.isolateInstrument}
+                  className="isolator">i</button>
 
         <div className="pad-container">
           <select onChange={this.changeSound}>
           {Object.keys(soundLib.sources).map((key)=>
-             <option key={key} value={key} selected={this.props.name === key}>{key}</option>
+              <option  key={key}
+                      value={key}
+                      selected={this.props.name === key}>{key}
+              </option>
             )
           }
 
           </select>
-        {Array.apply(null, Array(16)).map((i, index)=>
+        {Array.apply(null, Array(16)).map((_, index)=>
           <Pad
-            name={this.props.name}
-            isPlaying={this.isPlaying}
-            current16thNote={this.props.current16thNote}
             beatToPlay={this.beatToPlay}
-            audioCtx={this._audioCtx}
             key={index}
             _key={index +1}
-            onPadClick={()=>{this.onPadClick(index + 1)}}
-            currentSequence={this.sequence[this.props.currentBar]}
+            onPadClick={this.onPadClick}
+            currentSequence={this.allSequences[this.props.currentBar]}
             currentBar={this.props.currentBar}
+            allSequences = {this.allSequences}
+            indexOfLockedBar={this.props.indexOfLockedBar}
+            isBarViewLocked={this.props.isBarViewLocked}
+            sequenceToDisplay={this.sequenceToDisplay}
             />
         )}
       </div>

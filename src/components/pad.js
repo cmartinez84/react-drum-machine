@@ -10,27 +10,36 @@ class Pad extends Component {
     }
   }
   componentDidMount(){
-  }
-  componentWillReceiveProps=(nextProps)=>{
-    if(nextProps.beatToPlay == this.props._key ){
-      this.setState({isPlaying: true});
-    }
-    else{
-      this.setState({isPlaying: false});
-    }
-    if(nextProps.currentSequence.includes(this.props._key)){
-      this.setState({isPressed: true});
-    }
-    else{
-      this.setState({isPressed: false});
-    }
+
   }
 
+  componentWillReceiveProps=(nextProps)=>{
+    var sequenceToDisplay = nextProps.sequenceToDisplay;
+    var isLockedBarPlaying = !nextProps.isBarViewLocked || this.props.currentBar === this.props.indexOfLockedBar;
+      if(nextProps.beatToPlay == this.props._key  && isLockedBarPlaying){
+        this.setState({isPlaying: true});
+      }
+      else{
+        this.setState({isPlaying: false});
+      }
+      if(sequenceToDisplay.includes(this.props._key)){
+        this.setState({isPressed: true});
+      }
+      else{
+        this.setState({isPressed: false});
+      }
+    }
   //currently tiles onl reveal themselves once the next beat is measured out. this makes a change instantly
   onPadClick = () =>{
     //prevents needing to wiat for next beat to update pad pressed
+    if(this.props.isBarViewLocked){
+      var sequenceIndex = this.props.indexOfLockedBar;
+    }
+    else{
+      var sequenceIndex = this.props.currentBar;
+    }
     this.setState({isPressed: !this.state.isPlaying});
-    this.props.onPadClick();
+    this.props.onPadClick(this.props._key, sequenceIndex);
   }
 
 
@@ -38,7 +47,10 @@ class Pad extends Component {
 
     return (
       <button
-        className={`pad ${this.state.isPlaying === true ? 'lit':''} ${this.state.isPressed ? 'pressed': ''} ${this.props._key % 4 === 0 && 'bar-end'}`}
+        className={`pad ${this.state.isPlaying === true ? 'lit':''}
+                        ${this.state.isPressed ? 'pressed': ''}
+                        ${this.props._key % 4 === 0 && 'bar-end'}`
+                  }
         onClick={this.onPadClick}>
       </button>
 
