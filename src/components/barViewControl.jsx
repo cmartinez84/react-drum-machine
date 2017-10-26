@@ -31,7 +31,7 @@ class BarViewControl extends Component {
           <span data-direction="-1"
                 onClick={this.changeBarView}>&larr;</span>
             <button>
-              {this.props.indexOfLockedBar}
+              {this.props.indexOfLockedBar +1}
             </button>
               <span data-direction="1" onClick={this.changeBarView}>&rarr;</span>
         </p>

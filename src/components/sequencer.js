@@ -112,8 +112,8 @@ class Sequencer extends Component {
     // var oldIndex = this.state.indexOfLockedBar;
     var newIndex = this.state.indexOfLockedBar += n;
     console.log(newIndex);
-    if(newIndex >8){
-      newIndex = 8
+    if(newIndex >7){
+      newIndex = 7
     }
     else if(newIndex < 0){
       newIndex = 0;
