@@ -7,23 +7,50 @@ import meow from '../sounds/meow.mp3';
 import thump from '../sounds/thump.mp3';
 import trashcansnare from '../sounds/trashcansnare.mp3';
 import heyyo from '../sounds/heyyo.mp3';
+///////RANDOS
+import hihatacoustic from '../sounds/rando/hihat-acoustic01.wav';
+import hihatanalog from '../sounds/rando/hihat-analog.wav';
+import kick808 from '../sounds/rando/kick-808.wav';
+import kicktape from '../sounds/rando/kick-tape.wav';
+import kickzapper from '../sounds/rando/kick-zapper.wav';
+import openhatslick from '../sounds/rando/openhat-slick.wav';
+import percnasty from '../sounds/rando/perc-nasty.wav';
+import percweirdo from '../sounds/rando/perc-weirdo.wav';
+// import fs from '-all';
 
-// export default
-// export const sources = [
-//   {name: 'kick', path: kick},
-//   {name: 'snare', path: snare },
-//   {name: 'hihat', path: hihat },
-//   {name: 'shaker', path: shaker}
-// ]
+
+// console.log(RequireAll);
+
+
+// same as
+// var controllers = {
+//     homeController: require('./controllers/home-controller.js'),
+//     aboutController: require('./controllers/about-controller.js'),
+//     admin: {
+//         dashboardController: require('./controllers/admin/dashboard-controller.js')
+//     }
+//     // ...
+// }
+
+
+
 
 export const sources = {
-  kick: kick,
-  snare: snare,
-  hihat: hihat,
-  shaker: shaker,
-  crackle: crackle,
-  meow: meow,
-  thump: thump,
-  trashcansnare: trashcansnare,
-  heyyo: heyyo,
+  kick,
+  snare,
+  hihat,
+  shaker,
+  crackle,
+  meow,
+  thump,
+  trashcansnare,
+  heyyo,
+  hihatacoustic,
+  hihatanalog,
+  kick808,
+  kicktape,
+  openhatslick,
+  percnasty,
+  percweirdo,
+  kickzapper
 }

@@ -19,7 +19,20 @@ try{
 catch(err){
   console.log("Looks like you're using outdated technology");
 }
+var Knob2 = require('knob') // browserify require
 
+var knob = Knob2({
+  label: 'Test 123',
+  value: 100,
+  angleOffset: -125,
+  angleArc: 250,
+  min: 0,
+  max: 200,
+  width: 100
+})
+console.log(typeof knob);
+var chris = "chris";
+// document.getElementById('container').appendChild(knob)
 
 class Sequencer extends Component {
   //variables
@@ -51,6 +64,7 @@ class Sequencer extends Component {
     }
   }
   componentDidMount = () =>{
+    document.getElementById('poop').appendChild(knob)
 
   }
 
@@ -188,6 +202,7 @@ class Sequencer extends Component {
   render() {
     return (
       <div class="container">
+        <h1 id="poop">poop</h1>
         <div className="top-row">
           <div className="sequencer">
             {track.instruments.map((instrument, i)=>
@@ -268,7 +283,6 @@ class Sequencer extends Component {
           )
         }
         <button onClick={this.beginScheduler} >Start</button>
-
       </div>
 
     );
