@@ -3,6 +3,7 @@ import Tuna from 'tunajs';
 import Sound from './sound';
 import Knob from './knob.js';
 import Volume from './volume.js';
+import TapButton from './tapButton.jsx';
 import BarCounter from './barCounter.jsx';
 import BeatCounter from './beatCounter';
 import BarViewControl from './barViewControl';
@@ -37,7 +38,6 @@ class Sequencer extends Component {
   trackHasStarted = false;
   allTuna =  generateTuna();
   barsIndexCount = 7;
-  // isBarViewLocked = false;
   soundObjReferences = [];
 
   constructor(props){
@@ -53,8 +53,6 @@ class Sequencer extends Component {
     }
   }
   componentDidMount = () =>{
-    // document.getElementById('poop').appendChild(knob)
-
   }
 
   futureTick =() =>{
@@ -94,6 +92,11 @@ class Sequencer extends Component {
       track.instruments[instKey].sequence[barKey].push(padKey);
     }
   }
+  tapIntoSequence=(instKey)=>{
+    const padKey = this.state.current16thNote;
+    const sequenceIndex = this.state.isBarViewLocked ? this.state.indexOfLockedBar: this.state.currentBar;
+    this.changeSequence(padKey, instKey, sequenceIndex);
+  }
 
   handleGainChange = (newGain, instIndex) => {
     this.soundObjReferences[instIndex].gainNode.gain.value = newGain;
@@ -102,14 +105,6 @@ class Sequencer extends Component {
     track.instruments[instrumentIndex].name = instrumentName;
 
   }
-  // changeBarView = () => {
-  //   const nextBar = this.nextScheduledBar;
-  //   this.setState({
-  //     currentBar: nextBar,
-  //     current16thNote: 1
-  //   });
-  //   this.isBarChangeScheduled = false;
-  // }
   changeBarView=(n)=>{
     // var oldIndex = this.state.indexOfLockedBar;
     var newIndex = this.state.indexOfLockedBar += n;
@@ -159,7 +154,6 @@ class Sequencer extends Component {
     instrument.tunaFilter.disconnect();
     instrument.tunaFilter = instrument.allTuna[newTuna];
   }
-//rt
   rotateBar = () => {
     var testNextBar = this.state.barSequence.indexOf(true, this.state.currentBar + 1);
     if(testNextBar === -1){
@@ -173,14 +167,8 @@ class Sequencer extends Component {
   toggleBarSequence = (index) =>{
     var newBarSequence = this.state.barSequence.slice();
     newBarSequence[index] = !newBarSequence[index];
-    // newBarSequence[index] = 22;
     this.setState({barSequence: newBarSequence});
   }
-  //
-
-  // {Array.apply(null, Array(7)).map((i)=>
-  //   <Bar/>
-  // )}
   lockBarView = (index) =>{
     this.setState({isBarViewLocked: !this.state.isBarViewLocked});
     this.setState({indexOfLockedBar: index });
@@ -188,11 +176,16 @@ class Sequencer extends Component {
   toggleMouseDown= ()=>{
     this.setState({isMouseDown: !this.state.isMouseDown});
   }
+  mouseOut=()=>{
+    this.setState({isMouseDown: false});
+    alert("out");
+  }
   render() {
     return (
       <div class="container"
           onMouseDown={this.toggleMouseDown}
-          onMouseUp={this.toggleMouseDown}>
+          onMouseUp={this.toggleMouseDown}
+      >
         <div className="top-row">
           <div className="sequencer">
             {track.instruments.map((instrument, i)=>
@@ -262,6 +255,12 @@ class Sequencer extends Component {
 
         {track.instruments.map((instrument, index)=>
           <div className="instrument-controls">
+            <div>
+              <TapButton
+                instIndex={index}
+                onTap={this.tapIntoSequence}>
+              </TapButton>
+            </div>
             <p>{instrument.name}</p>
             <Volume handleGainChange={this.handleGainChange}
                     instIndex={index}/>
