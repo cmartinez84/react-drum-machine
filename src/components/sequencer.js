@@ -48,7 +48,8 @@ class Sequencer extends Component {
       tempo: 120,
       barSequence: [true, false, false, false, false, false, false, false],
       indexOfLockedBar: 0,
-      isBarViewLocked: false
+      isBarViewLocked: false,
+      isMouseDown: false,
     }
   }
   componentDidMount = () =>{
@@ -184,10 +185,14 @@ class Sequencer extends Component {
     this.setState({isBarViewLocked: !this.state.isBarViewLocked});
     this.setState({indexOfLockedBar: index });
   }
-
+  toggleMouseDown= ()=>{
+    this.setState({isMouseDown: !this.state.isMouseDown});
+  }
   render() {
     return (
-      <div class="container">
+      <div class="container"
+          onMouseDown={this.toggleMouseDown}
+          onMouseUp={this.toggleMouseDown}>
         <div className="top-row">
           <div className="sequencer">
             {track.instruments.map((instrument, i)=>
@@ -211,6 +216,7 @@ class Sequencer extends Component {
               isolateInstrument={this.isolateInstrument}
               indexOfLockedBar={this.state.indexOfLockedBar}
               isBarViewLocked={this.state.isBarViewLocked}
+              isMouseDown={this.state.isMouseDown}
               />
           </div>
 

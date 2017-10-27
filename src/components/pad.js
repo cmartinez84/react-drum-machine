@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 class Pad extends Component {
+  isMouseDown: false;
 
   constructor(props){
     super(props);
@@ -41,7 +42,14 @@ class Pad extends Component {
     this.setState({isPressed: !this.state.isPlaying});
     this.props.onPadClick(this.props._key, sequenceIndex);
   }
-
+  onMouseOver = (e) => {
+    if(this.props.isMouseDown){
+      this.onPadClick();
+    }
+  }
+  flagMouseDown= () =>{
+    this.isMouseDown = !this.isMouseDown;
+  }
 
   render() {
 
@@ -51,7 +59,9 @@ class Pad extends Component {
                         ${this.state.isPressed ? 'pressed': ''}
                         ${this.props._key % 4 === 0 && 'bar-end'}`
                   }
-        onClick={this.onPadClick}>
+        onClick={this.onPadClick}
+        onMouseOver={this.onMouseOver}
+        >
       </button>
 
 

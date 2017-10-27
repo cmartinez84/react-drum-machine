@@ -189,6 +189,7 @@ isolateInstrument=()=>{
             indexOfLockedBar={this.props.indexOfLockedBar}
             isBarViewLocked={this.props.isBarViewLocked}
             sequenceToDisplay={this.sequenceToDisplay}
+            isMouseDown={this.props.isMouseDown}
             />
         )}
       </div>
