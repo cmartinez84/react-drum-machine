@@ -67,7 +67,7 @@ width: 80px;
   color: red;
 }
 div.instrument-controls{
- border: 1px solid green;
+ /*border: 1px solid green;*/
  display: inline-block;
  width: 100px;
  height: 200px;
@@ -75,9 +75,9 @@ div.instrument-controls{
 div.instrument-controls p {
   margin: 0px;
 }
-div.instrument-volume{
+/*div.instrument-volume{
   display: inline-block;
-}
+}*/
 
 span.instrument-pad-name{
   display: inline-block;
@@ -157,4 +157,8 @@ display: inline-block;
 }
 .bar-lock-active{
   background: yellow;
+}
+.knob {
+    fill: url("#knob1");
+    stroke: green;
 }

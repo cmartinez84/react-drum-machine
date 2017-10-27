@@ -40,7 +40,6 @@ class Sound extends Component {
     else {
       this.sequenceToDisplay = this.allSequences[nextProps.currentBar];
     }
-    console.log(this.sequenceToDisplay);
 
     if(nextProps.trackHasStarted){
       if(nextProps.current16thNote != this.prevBeat){

@@ -19,18 +19,6 @@ try{
 catch(err){
   console.log("Looks like you're using outdated technology");
 }
-var Knob2 = require('knob') // browserify require
-
-var knob = Knob2({
-  label: 'Test 123',
-  value: 100,
-  angleOffset: -125,
-  angleArc: 250,
-  min: 0,
-  max: 200,
-  width: 100
-})
-console.log(typeof knob);
 var chris = "chris";
 // document.getElementById('container').appendChild(knob)
 
@@ -64,7 +52,7 @@ class Sequencer extends Component {
     }
   }
   componentDidMount = () =>{
-    document.getElementById('poop').appendChild(knob)
+    // document.getElementById('poop').appendChild(knob)
 
   }
 
@@ -97,7 +85,6 @@ class Sequencer extends Component {
   }
   changeSequence=(padKey, instKey, sequenceIndex)=>{
     var barKey =  this.state.isBarViewLocked ? this.state.indexOfLockedBar : this.state.currentBar;
-    console.log(barKey);
     if(track.instruments[instKey].sequence[barKey].includes(padKey)){
       const index = track.instruments[instKey].sequence[barKey].indexOf(padKey);
       track.instruments[instKey].sequence[barKey].splice(index, 1);
@@ -125,7 +112,6 @@ class Sequencer extends Component {
   changeBarView=(n)=>{
     // var oldIndex = this.state.indexOfLockedBar;
     var newIndex = this.state.indexOfLockedBar += n;
-    console.log(newIndex);
     if(newIndex >7){
       newIndex = 7
     }
@@ -202,7 +188,6 @@ class Sequencer extends Component {
   render() {
     return (
       <div class="container">
-        <h1 id="poop">poop</h1>
         <div className="top-row">
           <div className="sequencer">
             {track.instruments.map((instrument, i)=>
