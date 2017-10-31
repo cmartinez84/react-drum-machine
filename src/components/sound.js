@@ -87,8 +87,10 @@ loadImpulse = function (path)
       getSound.open("GET", soundObj.fileDirectory, true);
       getSound.responseType = "arraybuffer";
       getSound.onload = () => {
+        console.log(getSound.response);
           this._audioCtx.decodeAudioData(getSound.response, function(buffer) {
               soundObj.soundToPlay = buffer;
+              
           });
       }
       ////distortion!!!
