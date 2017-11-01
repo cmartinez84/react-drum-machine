@@ -16,23 +16,6 @@ import kickzapper from '../sounds/rando/kick-zapper.wav';
 import openhatslick from '../sounds/rando/openhat-slick.wav';
 import percnasty from '../sounds/rando/perc-nasty.wav';
 import percweirdo from '../sounds/rando/perc-weirdo.wav';
-// import fs from '-all';
-
-
-// console.log(RequireAll);
-
-
-// same as
-// var controllers = {
-//     homeController: require('./controllers/home-controller.js'),
-//     aboutController: require('./controllers/about-controller.js'),
-//     admin: {
-//         dashboardController: require('./controllers/admin/dashboard-controller.js')
-//     }
-//     // ...
-// }
-
-
 
 
 export const sources = {

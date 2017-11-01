@@ -162,3 +162,6 @@ display: inline-block;
     fill: url("#knob1");
     stroke: green;
 }
+audio.newSound{
+  width: 72px;
+}

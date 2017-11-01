@@ -9,7 +9,7 @@ import BarCounter from './barCounter.jsx';
 import BeatCounter from './beatCounter';
 import BarViewControl from './barViewControl';
 import Metronome from './metronome';
-import VoiceRecorder from './voicerecorder'
+import VoiceRecorder from './voicerecorder';
 ///test
 // import * as BOOM from './encoderWorker.js';
 
@@ -196,8 +196,7 @@ class Sequencer extends Component {
     return (
       <div class="container"
           onMouseDown={this.toggleMouseDown}
-          onMouseUp={this.toggleMouseDown}
-      >
+          onMouseUp={this.toggleMouseDown}>
         <div className="top-row">
           <div className="sequencer">
             {track.instruments.map((instrument, i)=>
@@ -229,20 +228,26 @@ class Sequencer extends Component {
           }
         </div>
 
-        <div className="main-controls">
-          <h1> Main Controls</h1>
-          <p> Tempo: {this.state.tempo}</p>
-          <Knob onTempoChange={this.onTempoChange}/>
-            <Metronome
-              audioCtx={this.audioCtx}
-              current16thNote={this.state.current16thNote}
-              futureTickTime={this.futureTickTime}/>
-            <BarCounter
-              barSequence={this.state.barSequence}
-              currentBar={this.state.currentBar}
-              scheduleBarChange={this.scheduleBarChange}
-              toggleBarSequence={this.toggleBarSequence}
-              />
+        <div className="main-controls" >
+          <div>
+            <h1> Main Controls</h1>
+            <p> Tempo: {this.state.tempo}</p>
+            <Knob onTempoChange={this.onTempoChange}/>
+              <Metronome
+                audioCtx={this.audioCtx}
+                current16thNote={this.state.current16thNote}
+                futureTickTime={this.futureTickTime}/>
+              <BarCounter
+                barSequence={this.state.barSequence}
+                currentBar={this.state.currentBar}
+                scheduleBarChange={this.scheduleBarChange}
+                toggleBarSequence={this.toggleBarSequence}/>
+          </div>
+          <div>
+            <h1>Voice Recorder</h1>
+            <VoiceRecorder addToLocalLibrary={this.addToLocalLibrary}/>
+          </div>
+
         </div>
 
         </div>
@@ -285,7 +290,6 @@ class Sequencer extends Component {
           )
         }
         <button onClick={this.beginScheduler} >Start</button>
-        <VoiceRecorder addToLocalLibrary={this.addToLocalLibrary}/>
       </div>
 
     );
