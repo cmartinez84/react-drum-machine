@@ -30,13 +30,16 @@ class VoiceRecorder extends Component {
   recorderCtx = new AudioContext;
   recorder;
   input;
+  stream;
 
    startUserMedia=(stream)=>{
+     this.stream = stream.getTracks()[0];
       var ctx = this.recorderCtx;
       this.input = ctx.createMediaStreamSource(stream);
-      this.input.connect(ctx.destination);
-
+      // this.input.connect(ctx.destination);
       this.recorder = new Recorder(this.input);
+      this.recorder.record();
+
   }
 
   loadUp = ()=> {
@@ -45,12 +48,12 @@ class VoiceRecorder extends Component {
     });
   }
   startRecording = () =>{
-    this.recorder.record();
+    this.loadUp();
   }
   stopRecording = () =>{
+    this.stream.stop();
     this.recorder.stop()
-    this.input.disconnect();
-    this.createDownloadLink()
+    this.createDownloadLink();
 
   }
   createDownloadLink = () => {
@@ -59,8 +62,6 @@ class VoiceRecorder extends Component {
         var url = URL.createObjectURL(blob);
         var li = document.createElement('li');
         var au = document.createElement('audio');
-        au.setAttribute('loop', true);
-        au.setAttribute('autoplay', true);
         var hf = document.createElement('a');
         au.controls = true;
         au.src = url;
@@ -72,16 +73,23 @@ class VoiceRecorder extends Component {
         destination.appendChild(li);
       });
     }
-
+  clearRecording=()=>{
+    this.recorder.clear();
+  }
+  queen=()=>{
+    console.log(navigator.getUserMedia[0]);
+  }
 
 
   render() {
 
     return (
       <div>
-        <button onClick={this.loadUp}> Load Up</button>
-        <button onClick={this.startRecording}> Load Up</button>
-        <button onClick={this.stopRecording}> Load Up</button>
+      <button onClick={this.queen}> Queen </button>
+      <button onClick={this.startRecording}> Start</button>
+
+        <button onClick={this.stopRecording}> Stop</button>
+        <button onClick={this.clearRecording}>Clear</button>
         <div id="recordings"></div>
       </div>
 
