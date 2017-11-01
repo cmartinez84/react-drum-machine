@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Tuna from 'tunajs';
+
 import Sound from './sound';
 import Knob from './knob.js';
 import Volume from './volume.js';
@@ -7,8 +8,13 @@ import TapButton from './tapButton.jsx';
 import BarCounter from './barCounter.jsx';
 import BeatCounter from './beatCounter';
 import BarViewControl from './barViewControl';
-import * as soundLib from '../sounds/soundSources.js';
 import Metronome from './metronome';
+import VoiceRecorder from './voicerecorder'
+///test
+// import * as BOOM from './encoderWorker.js';
+
+
+import * as soundLib from '../sounds/soundSources.js';
 import {generateTuna} from './generateTuna.js';
 import {track} from './track.js';
 
@@ -20,8 +26,8 @@ try{
 catch(err){
   console.log("Looks like you're using outdated technology");
 }
-var chris = "chris";
-// document.getElementById('container').appendChild(knob)
+
+
 
 class Sequencer extends Component {
   //variables
@@ -39,6 +45,8 @@ class Sequencer extends Component {
   allTuna =  generateTuna();
   barsIndexCount = 7;
   soundObjReferences = [];
+
+
 
   constructor(props){
     super(props);
@@ -273,6 +281,7 @@ class Sequencer extends Component {
           )
         }
         <button onClick={this.beginScheduler} >Start</button>
+        <VoiceRecorder/>
       </div>
 
     );
