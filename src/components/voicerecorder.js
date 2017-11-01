@@ -30,10 +30,17 @@ class VoiceRecorder extends Component {
   recorderCtx = new AudioContext;
   recorder;
   input;
-  stream;
+  streamTracker;
+
+  constructor(props){
+    super(props);
+    this.state = {
+      newSoundPath: null,
+    }
+  }
 
    startUserMedia=(stream)=>{
-     this.stream = stream.getTracks()[0];
+     this.streamTracker = stream.getTracks()[0];
       var ctx = this.recorderCtx;
       this.input = ctx.createMediaStreamSource(stream);
       // this.input.connect(ctx.destination);
@@ -51,13 +58,13 @@ class VoiceRecorder extends Component {
     this.loadUp();
   }
   stopRecording = () =>{
-    this.stream.stop();
+    this.streamTracker.stop();
     this.recorder.stop()
     this.createDownloadLink();
 
   }
   createDownloadLink = () => {
-      this.recorder && this.recorder.exportWAV(function(blob) {
+      this.recorder && this.recorder.exportWAV((blob) =>{
         var destination = document.getElementById('recordings');
         var url = URL.createObjectURL(blob);
         var li = document.createElement('li');
@@ -71,26 +78,28 @@ class VoiceRecorder extends Component {
         li.appendChild(au);
         li.appendChild(hf);
         destination.appendChild(li);
+        this.setState({newSoundPath: au.src});
       });
     }
   clearRecording=()=>{
     this.recorder.clear();
   }
-  queen=()=>{
-    console.log(navigator.getUserMedia[0]);
-  }
+addToLocalLibrary=()=>{
+  var path = this.state.newSoundPath;
+  var newInstrumentName = document.getElementById('newInstrumentName').value;
+  this.props.addToLocalLibrary(newInstrumentName, path);
 
-
+}
   render() {
 
     return (
       <div>
-      <button onClick={this.queen}> Queen </button>
-      <button onClick={this.startRecording}> Start</button>
-
+        <button onClick={this.startRecording}> Start</button>
         <button onClick={this.stopRecording}> Stop</button>
         <button onClick={this.clearRecording}>Clear</button>
         <div id="recordings"></div>
+        <button onClick={this.addToLocalLibrary}>Add</button>
+        <input type="text" placeholder="give your sound a name" id="newInstrumentName"/>
       </div>
 
 

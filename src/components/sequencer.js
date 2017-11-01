@@ -188,6 +188,10 @@ class Sequencer extends Component {
     this.setState({isMouseDown: false});
     alert("out");
   }
+
+  addToLocalLibrary=(newInstrumentName, path)=>{
+    soundLib.sources[newInstrumentName]=path;
+  }
   render() {
     return (
       <div class="container"
@@ -281,7 +285,7 @@ class Sequencer extends Component {
           )
         }
         <button onClick={this.beginScheduler} >Start</button>
-        <VoiceRecorder/>
+        <VoiceRecorder addToLocalLibrary={this.addToLocalLibrary}/>
       </div>
 
     );
